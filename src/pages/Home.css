@@ -1,0 +1,243 @@
+General Reset
+.home-page {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
+  }
+  
+  /* Header Styling */
+  .header {
+    background-color: #4caf50;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+  }
+  
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0 0 0;
+  }
+  
+  .nav-links li {
+    margin: 0 20px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+  
+  .nav-links a:hover {
+    color: #d4edda;
+    text-decoration: underline;
+  }
+
+  
+  .language-selector {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  .language-selector button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .language-selector button:hover {
+    background-color: #45a049;
+  }
+  
+  
+  /* Hero Section */
+  .hero {
+    position: relative;
+    text-align: center;
+    color: white;
+  }
+  
+  .hero-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  
+  .hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+  }
+  
+  .hero-text h2 {
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+  }
+  
+  .hero-text p {
+    font-size: 1.2rem;
+  }
+  
+  /* Features Section */
+  .features {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f1f8e9;
+  }
+  
+  .section-title {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    color: #4caf50;
+  }
+  
+  /* Flexbox for Feature Grid */
+  .feature-grid {
+    display: flex;
+    justify-content: space-evenly; /* Space out the feature cards evenly */
+    align-items: stretch;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .feature-card {
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 230px; /* Ensuring all cards have same width */
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .feature-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .feature-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  .feature-card h3 {
+    margin: 15px 0;
+    font-size: 1.3rem;
+    color: #4caf50;
+  }
+  
+  .feature-card p {
+    font-size: 1rem;
+    padding: 0 15px 15px;
+    color: #555;
+  }
+  
+  /* Specific Styling for New Feature */
+  .feature-card:nth-child(4) .feature-image {
+    background-color: #ffeb3b; /* Fallback in case image fails to load */
+  }
+  
+  .feature-card:nth-child(4):hover h3 {
+    color: #ff9800; /* Highlight title on hover for this card */
+  }
+
+
+  
+  /* Footer */
+  .footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.9rem;
+  }
+  
+  /* Social Media Icons */
+  /* Follow Us Section */
+.follow-us {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f1f8e9;
+  }
+  
+  .social-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 150px; /* Adjust logo size */
+    margin-bottom: 20px;
+  }
+  
+  .social-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px; /* Space between social icons */
+  }
+  
+  .social-links .social-link {
+    display: block;
+  }
+  
+  .social-icon {
+    width: 70px; /* Adjust icon size */
+    height: 50px;
+    transition: transform 0.3s;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-text {
+      width: 90%;
+      font-size: 1rem;
+    }
+  
+    .hero-text h2 {
+      font-size: 1.5rem;
+    }
+  
+    .feature-card {
+      width: 90%; /* Full width for smaller screens */
+      margin-bottom: 20px;
+    }
+  
+    /* Stacked Feature Cards for Mobile View */
+    .feature-grid {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  
