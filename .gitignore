@@ -2,6 +2,7 @@
 .env
 src/config/serviceAccountKey.json
 
+
 # Build output (for Vite)
 dist
 .vite

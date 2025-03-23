@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { auth } from "../config/firebaseClient"; //Import Firebase auth
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, getIdToken } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import "./Signup.css";
 
@@ -25,35 +25,55 @@ function Signup() {
 
   const signup = async () => {
     if (!userName || !email || !password) {
-      alert("Please fill in all fields.");
-      return;
+        alert("Please fill in all fields.");
+        return;
     }
 
     setLoading(true);
     try {
-      // Call backend API (No direct Firebase Auth calls)
-      const response = await fetch("http://localhost:5000/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userName, email, password }),
-      });
+        // ✅ Register user with Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-      const data = await response.json();
-
-      if (response.ok) {
+        // ✅ Send email verification
+        await sendEmailVerification(user);
         alert("Signup successful! Please check your email for verification.");
-        navigate("/login");
-      } else {
-        alert(data.message); // Show backend error message if signup fails
-      }
+
+        // ✅ Generate Firebase refresh token
+        const refreshToken = await getIdToken(user, true);
+
+        // ❌ NO NEED TO HASH PASSWORD HERE
+        // ✅ Send user data to backend for MongoDB storage
+        console.log("📤 Sending user data to backend for MongoDB storage...");
+        const response = await fetch("http://localhost:5000/api/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                firebaseUID: user.uid,
+                userName,
+                email,
+                password,  // Send plain text password (Backend will hash it)
+                refreshToken,
+            }),
+        });
+
+        const data = await response.json();
+        console.log("📥 Backend response:", data);
+
+        if (response.ok) {
+            navigate("/login"); // Redirect to login page
+        } else {
+            alert("Error: " + data.message);
+        }
+
     } catch (error) {
-      alert("Signup failed: " + error.message);
+        alert("Signup failed: " + error.message);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
 
   return (
