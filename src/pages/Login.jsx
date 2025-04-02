@@ -16,17 +16,7 @@ function Login() {
     };
   }, []);
 
-  useEffect(() => {
-    const rootElement = document.getElementById("root");
-    if (rootElement) {
-      rootElement.classList.add("login-root");
-    }
-    return () => {
-      if (rootElement) {
-        rootElement.classList.remove("login-root");
-      }
-    };
-  }, []);
+  
 
   const changeLanguage = (event) => {
     setLanguage(event.target.value);
@@ -40,19 +30,17 @@ function Login() {
   return (
     <>
       {/* Video Background */}
-      <div className="video-background">
+      <div className="login-video-background">
         <video autoPlay loop muted playsInline>
           <source src="images/Farmers.mp4" type="video/mp4" />
-          {/* Fallback text for browsers that don't support video */}
           Your browser does not support HTML5 video.
         </video>
       </div>
 
-      <div className="container">
+      <div className="login-container">
         {/* Header Section */}
-        <div className="header">
-          <h1>🌾Farmer's Portal🌾</h1>
-          {/* Language Selection */}
+        <div className="login-header">
+          <h1>🌾 Farmer's Portal 🌾</h1>
           <select id="language" onChange={changeLanguage} value={language}>
             <option value="en">English</option>
             <option value="hi">Hindi</option>
@@ -61,13 +49,11 @@ function Login() {
         </div>
 
         {/* Form Section */}
-        <div id="login-section">
-          {/* Login Form */}
-          <form id="login-form">
+        <div className="login-form-container">
+          <form className="login-form">
             <h2>Login</h2>
             <input
               type="text"
-              id="name"
               placeholder="Enter Name"
               required
               value={name}
@@ -75,7 +61,6 @@ function Login() {
             />
             <input
               type="password"
-              id="password"
               placeholder="Enter Password"
               required
               value={password}
@@ -88,12 +73,10 @@ function Login() {
             <button type="button" onClick={login}>
               Login With Face
             </button>
-            <video ref={videoRef} id="video" width="320" height="240" autoPlay muted></video>
-            <div className="footer">
-              <p>
-                Don't have an account? <a href="signup.html">Signup</a>
-              </p>
-            </div>
+            <video ref={videoRef} className="login-video" width="320" height="240" autoPlay muted></video>
+            <h3>
+              Don't have an account? <a href="signup.html">Signup</a>
+            </h3>
           </form>
         </div>
       </div>
