@@ -1,13 +1,20 @@
 import { useState, useEffect, useRef } from "react";
+import { auth } from "../config/firebaseClient"; // Import Firebase auth
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 // import * as faceapi from "face-api.js";
 import "./Login.css";
 
 function Login() {
   const [language, setLanguage] = useState("en");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  // const [name, setName] = useState("");
   const videoRef = useRef(null);
-  const [faceModelLoaded, setFaceModelLoaded] = useState(false);
+  // const [faceModelLoaded, setFaceModelLoaded] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     document.body.classList.add("login-page");
@@ -16,15 +23,53 @@ function Login() {
     };
   }, []);
 
-  
 
   const changeLanguage = (event) => {
     setLanguage(event.target.value);
   };
 
-  const login = () => {
-    console.log("Login with:", name, password);
-    // Implement login authentication here
+  const login = async () => {
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Firebase Sign-in Attempt
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Prevent login if email is not verified
+      if (!user.emailVerified) {
+        alert("Please verify your email before logging in.");
+        setLoading(false);
+        return;
+      }
+
+      // Send request to backend for MongoDB password validation
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("✅ Login successful:", data);
+        alert("Login successful!");
+        navigate("/");
+      } else {
+        alert("Login failed: " + data.message);
+      }
+
+    } catch (error) {
+      console.error("❌ Login error:", error.message);
+      alert("Login failed: " + error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,11 +98,11 @@ function Login() {
           <form className="login-form">
             <h2>Login</h2>
             <input
-              type="text"
-              placeholder="Enter Name"
+              type="email"
+              placeholder="Enter Email"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
@@ -66,9 +111,9 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="button" onClick={login}>
-              Login
-            </button>
+            <button type="button" onClick={login} disabled={loading}>
+        {loading ? "Logging in..." : "Login"}
+      </button>
             <br />
             <button type="button" onClick={login}>
               Login With Face

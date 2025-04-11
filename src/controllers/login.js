@@ -21,7 +21,7 @@ export const login = async (req, res) => {
 
         // Ensure email is verified
         if (!userRecord.emailVerified) {
-            return res.status(400).json({ message: "Please verify your email before logging in." });
+            return res.status(403).json({ message: "Email not verified. Please check your inbox for the verification link." });
         }
 
         console.log("🔍 Checking MongoDB for user...");

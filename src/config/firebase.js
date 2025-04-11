@@ -7,7 +7,7 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
 
-console.log("🔥 Firebase Initialized Successfully");
+console.log("Firebase Initialized Successfully");
 
 export default admin;
 
