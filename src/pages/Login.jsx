@@ -3,7 +3,7 @@ import { auth } from "../config/firebaseClient"; // Import Firebase auth
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 // import * as faceapi from "face-api.js";
-import "./Login.css";
+import "./css/Login.css";
 
 function Login() {
   const [language, setLanguage] = useState("en");
@@ -57,7 +57,7 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("✅ Login successful:", data);
+        console.log("Login successful:", data);
         alert("Login successful!");
         navigate("/");
       } else {
@@ -65,7 +65,7 @@ function Login() {
       }
 
     } catch (error) {
-      console.error("❌ Login error:", error.message);
+      console.error("Login error:", error.message);
       alert("Login failed: " + error.message);
     } finally {
       setLoading(false);

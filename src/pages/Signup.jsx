@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { auth } from "../config/firebaseClient"; //Import Firebase auth
 import { createUserWithEmailAndPassword, sendEmailVerification, getIdToken } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "./Signup.css";
+import "./css/Signup.css";
 
 function Signup() {
   const [language, setLanguage] = useState("en");
@@ -31,19 +31,19 @@ function Signup() {
 
     setLoading(true);
     try {
-        // ✅ Register user with Firebase Authentication
+        // Register user with Firebase Authentication
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // ✅ Send email verification
+        // Send email verification
         await sendEmailVerification(user);
         alert("Signup successful! Please check your email for verification.");
 
-        // ✅ Generate Firebase refresh token
+        // Generate Firebase refresh token
         const refreshToken = await getIdToken(user, true);
 
-        // ❌ NO NEED TO HASH PASSWORD HERE
-        // ✅ Send user data to backend for MongoDB storage
+        // NO NEED TO HASH PASSWORD HERE
+        // Send user data to backend for MongoDB storage
         console.log("📤 Sending user data to backend for MongoDB storage...");
         const response = await fetch("http://localhost:5000/api/signup", {
             method: "POST",
