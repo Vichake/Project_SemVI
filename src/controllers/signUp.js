@@ -6,9 +6,9 @@ export const signUp = async (req, res) => {
     try {
         console.log("🚀 Backend received signup request:", req.body); // Debug log
 
-        const { firebaseUID, userName, email, password, refreshToken } = req.body;
+        const { firebaseUID, name, email, password, phone, refreshToken } = req.body;
 
-        if (!firebaseUID || !userName || !email || !password || !refreshToken) {
+        if (!firebaseUID || !name || !email || !password || !phone || !refreshToken) {
             console.log("❌ Missing required fields in request.");
             return res.status(400).json({ message: "All fields are required" });
         }
@@ -26,9 +26,10 @@ export const signUp = async (req, res) => {
         console.log("💾 Storing user in MongoDB...");
         const user = new User({
             firebaseUID,
-            userName,
+            name,
             email,
             password: hashedPassword, // ✅ Storing hashed password
+            phone,
             refreshToken
         });
 
