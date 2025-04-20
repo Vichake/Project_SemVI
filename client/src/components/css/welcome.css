@@ -1,0 +1,50 @@
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    background: linear-gradient(to right, #f1f8e9, #e0f2f1); /* Light farmy tones */
+  }
+  
+  .welcome-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 2rem 3rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    transition: transform 0.3s ease;
+  }
+  
+  .welcome-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .welcome-title {
+    font-size: 2rem;
+    color: #4caf50; /* Green farm tone */
+    margin-bottom: 1rem;
+  }
+  
+  .welcome-message {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .welcome-card {
+      padding: 1.5rem 1.2rem;
+    }
+  
+    .welcome-title {
+      font-size: 1.5rem;
+    }
+  
+    .welcome-message {
+      font-size: 0.95rem;
+    }
+  }
+  

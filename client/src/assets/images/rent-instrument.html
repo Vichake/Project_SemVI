@@ -1,0 +1,239 @@
+	
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8" />
+ 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>FarmGear Rental Haven - Rent Farm Equipment</title>
+  
+    <meta name="description" content="Rent high-quality farm equipment with ease. Choose from tractors, harvesters, plows, and more." />
+
+    <meta name="author" content="FarmGear Rental Haven" />
+    
+    <meta property="og:image" content="/og-image.png" />
+   
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   
+    <link rel="stylesheet" href="rent.css">
+  </head>
+
+  
+  <body>
+    <div id="root"></div
+
+-->
+    <section class="hero-section">
+      
+      <div class="hero-bg"></div>
+
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title animate-fade-in">
+            Rent the Best Farm Equipment with Ease!
+          </h1>
+          <p class="hero-description animate-fade-in">
+            Choose from a variety of farm instruments and rent them instantly.
+          </p>
+          <button 
+            class="cta-button animate-fade-in"
+            onclick="scrollToEquipment()"
+          >
+            Browse Instruments
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- Equipment Display Section -->
+    <section id="equipment-section" class="equipment-section">
+      <div class="container">
+        <h2 class="section-title">Available Farm Equipment</h2>
+        
+        <!-- Category Filter -->
+        <div class="category-filter">
+          <button class="filter-button active" data-category="all">All Equipment</button>
+          <button class="filter-button" data-category="tractor">Tractors</button>
+          <button class="filter-button" data-category="harvester">Harvesters</button>
+          <button class="filter-button" data-category="plow">Plows</button>
+          <button class="filter-button" data-category="planter">Planters</button>
+          <button class="filter-button" data-category="irrigation">Irrigation</button>
+          <button class="filter-button" data-category="fertilizer">Fertilizers</button>
+        </div>
+        
+        <!-- Equipment Cards -->
+        <div class="equipment-grid" id="equipment-grid">
+          <!-- Equipment cards will be inserted here via JavaScript -->
+        </div>
+      </div>
+    </section>
+    <!-- Equipment Details Dialog -->
+    <div class="modal" id="model-dialog">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModelDialog()">&times;</span>
+        <div class="modal-header">
+          <h3 id="selected-equipment-name">Equipment Name</h3>
+          <p>Select a model to continue</p>
+        </div>
+        
+        <div class="modal-body">
+          <div class="equipment-image">
+            <img id="selected-equipment-img" src="" alt="Selected equipment">
+          </div>
+          
+          <div class="equipment-details">
+            <h3>Details</h3>
+            <p id="selected-equipment-details"></p>
+            
+            <div class="equipment-price">
+              <span class="price-icon">📅</span>
+              <span id="selected-equipment-price">$0 per day</span>
+            </div>
+            
+            <div class="equipment-stock">
+              <span class="stock-icon">✓</span>
+              <span>In Stock</span>
+            </div>
+            
+            <h3>Available Models</h3>
+            <div class="models-list" id="models-list">
+              <!-- Models will be inserted here via JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Rental Form Dialog -->
+    <div class="modal" id="rental-form-dialog">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeRentalForm()">&times;</span>
+        <div class="modal-header">
+          <h3 id="rental-equipment-name">Rent Equipment</h3>
+          <p id="rental-model-name">Model: Standard</p>
+        </div>
+        
+        <form id="rental-form">
+          <div class="form-group">
+            <label for="name">Your Name *</label>
+            <input 
+              id="name" 
+              name="name" 
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input 
+              id="email" 
+              name="email" 
+              type="email" 
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="duration">Rental Duration (days) *</label>
+            <input 
+              id="duration" 
+              name="duration" 
+              type="number" 
+              min="1"
+              placeholder="Number of days"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="location">Delivery Location (Optional)</label>
+            <input 
+              id="location" 
+              name="location" 
+              placeholder="Enter delivery address"
+            />
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit">Submit Rental Request</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+      <div class="toast-content">
+        <h4 id="toast-title">Notification</h4>
+        <p id="toast-message"></p>
+      </div>
+      <button onclick="closeToast()" class="toast-close">×</button>
+    </div>
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h3 class="footer-title">
+              <span class="icon">🚜</span>
+              FarmGear Rental Haven
+            </h3>
+            <p>
+              Providing quality farm equipment rentals to help you maximize your agricultural productivity.
+            </p>
+          </div>
+          
+          <div class="footer-section">
+            <h4 class="footer-subtitle">Contact Us</h4>
+            <div class="contact-info">
+              <div class="contact-item">
+                <span class="icon">📍</span>
+                <span>1234 Farm Road, Rural County</span>
+              </div>
+              <div class="contact-item">
+                <span class="icon">📞</span>
+                <span>(123) 456-7890</span>
+              </div>
+              <div class="contact-item">
+                <span class="icon">🏢</span>
+                <span>Mon-Fri: 8am-5pm, Sat: 9am-2pm</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="footer-section">
+            <h4 class="footer-subtitle">FAQ</h4>
+            <ul class="faq-list">
+              <li><a href="#">How does the rental process work?</a></li>
+              <li><a href="#">What's included in the rental price?</a></li>
+              <li><a href="#">Do you offer delivery services?</a></li>
+              <li><a href="#">What if equipment breaks down?</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="footer-divider"></div>
+        
+        <div class="copyright">
+          &copy; <span id="current-year"></span> FarmGear Rental Haven. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="rent.js"></script>
+</body>
+
+</html>
+
+
+
+

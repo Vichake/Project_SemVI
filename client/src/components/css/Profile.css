@@ -1,0 +1,128 @@
+.profile-popup-container {
+  position: fixed;
+  top: 20px; /* Adjust the top margin */
+  right: 20px; /* Adjust the right margin */
+  z-index: 1000; /* Ensure it appears above other content */
+  max-width: 100%; /* Ensure the container is responsive */
+  padding: 10px;
+  opacity: 0; /* Initially invisible */
+  transform: scale(0.5); /* Initially smaller */
+  animation: pop-up-animation 0.5s forwards; /* Apply the animation */
+}
+
+@keyframes pop-up-animation {
+  0% {
+    opacity: 0;
+    transform: scale(0.5); /* Start small and invisible */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.8); /* End at a slightly smaller size */
+  }
+}
+
+.profile-popup-card {
+  border: none; /* Remove default card border */
+  background: linear-gradient(135deg, #3e8e41, #a3d8a5); /* Earthy green gradient background */
+  color: white; /* Text color */
+  border-radius: 8px; /* Slightly larger border radius for a smoother look */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* A subtle shadow effect */
+  width: 320px; /* Reduced width */
+  overflow: hidden;
+}
+
+.profile-left {
+  background-color: rgba(0, 0, 0, 0.4); /* Darker semi-transparent background */
+  padding: 1.5rem; /* Reduced padding for a more compact look */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 90px; /* Smaller fixed width for the avatar */
+  height: 90px; /* Smaller fixed height for the avatar */
+  border: 4px solid white; /* White border around the avatar */
+  margin-bottom: 1rem; /* Margin below the avatar */
+  transition: transform 0.3s ease; /* Avatar hover effect */
+}
+
+.profile-left .profile-avatar {
+  border-radius: 50%; /* Ensure the avatar is perfectly circular */
+}
+
+.profile-left .profile-avatar:hover {
+  transform: scale(1.1); /* Slightly scale up the avatar on hover */
+}
+
+.custom-close-btn {
+  background: transparent;
+  border: none;
+  color: white; /* Close button color */
+  font-size: 1.5rem; /* Slightly larger size for better visibility */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.custom-close-btn:hover {
+  color: rgba(255, 255, 255, 0.8); /* Slightly change color on hover */
+}
+
+hr {
+  border: 1px solid rgba(255, 255, 255, 0.6); /* Use a light border for the separator */
+  margin: 1.5rem 0; /* Adjust margin for better spacing */
+}
+
+.profile-popup-card .p-4 {
+  padding: 1.5rem; /* Reduced padding inside the profile card for more compact spacing */
+}
+
+.profile-popup-card .d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.social-icons a {
+  text-decoration: none;
+  color: white;
+  margin: 0 8px; /* Adjusted spacing for icons */
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #a3d8a5; /* Highlight the icon color on hover */
+}
+
+.logout-btn {
+  background-color: #d32f2f; /* Red color for logout button */
+  color: white; /* White text color */
+  font-size: 0.9rem;
+  padding: 6px 12px; /* Smaller padding */
+  border-radius: 5px;
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.logout-btn:hover {
+  background-color: #b71c1c; /* Darker red on hover */
+}
+
+@media (max-width: 768px) {
+  .profile-popup-card {
+    width: 80%; /* Reduced width for smaller screens */
+    margin: 10px 0; /* Add some margin to avoid touching the edges */
+  }
+
+  .profile-avatar {
+    width: 80px; /* Reduced avatar size */
+    height: 80px; /* Reduced avatar size */
+  }
+
+  .profile-left {
+    padding: 1.2rem; /* Reduced padding */
+  }
+
+  .profile-popup-card .p-4 {
+    padding: 1.2rem; /* Adjusted padding */
+  }
+}
