@@ -9,6 +9,7 @@ export const getUser = async (req, res) => {
         }
         const user = await User.findOne({ email: userId.email });
         const response = {
+            _id: user._id,
             name: user.name,
             email: user.email,
             phone: user.phone,
