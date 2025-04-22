@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
           const response = await Axios.get(`${url}/getUser`, {
             params: { userId: parsedUser }
           });
+          // console.log(response.data);
           setUserData(response.data);
         } catch (error) {
           console.error('Error fetching user data:', error);

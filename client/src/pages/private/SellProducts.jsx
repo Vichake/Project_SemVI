@@ -1,24 +1,46 @@
+// src/pages/market/FarmMarketHub.jsx
+
+import React, { useState } from 'react';
+import './css/SellProducts.css';
+import Header from '../../components/Header';
 import { useUser } from '../../context/userContext.jsx';
-import Header from '../../components/Header.jsx';
-import Hero from '../../components/SellProducts/Hero.jsx';
+import HeroSection from '../../components/SellProducts/Hero.jsx';
 import MarketSelector from '../../components/SellProducts/MarketSelector.jsx';
-import PriceContent from '../../components/SellProducts/PriceContent.jsx';
 import ProductCategories from '../../components/SellProducts/ProductCategories.jsx';
 import SellProductModal from '../../components/SellProducts/SellProductModel.jsx';
-import './css/SellProducts.css';
+// import Footer from './components/Footer';
 
-const SellProducts = () => {
-    const { userData } = useUser();
+function FarmMarketHub() {
+  const { userData } = useUser();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [activeMarket, setActiveMarket] = useState('local');
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const handleMarketChange = (market) => {
+    setActiveMarket(market);
+  };
+
   return (
     <>
-        <Header userData={userData} />
-        <Hero />
-        <MarketSelector />
-        <PriceContent />
+      <Header userData={userData} />
+      <HeroSection toggleModal={toggleModal} />
+
+      <main className="main-content">
+        <MarketSelector activeMarket={activeMarket} onMarketChange={handleMarketChange} />
         <ProductCategories />
-        <SellProductModal />
+
+        <button className="button button-white" id="sellProductsButton" onClick={toggleModal}>
+          Sell Products
+        </button>
+      </main>
+
+      <SellProductModal visible={modalVisible} onClose={toggleModal} />
+      {/* <Footer /> */}
     </>
   );
 }
 
-export default SellProducts;
+export default FarmMarketHub;

@@ -1,30 +1,31 @@
-const ProductCategories = () => {
-    return (
-      <div className="product-categories">
-        <div className="categories-header">
-          <h2 className="section-title">Product Categories</h2>
-          <button id="viewAllButton" className="view-all-button hide">View All</button>
-        </div>
-  
-        <div className="categories-grid">
-          {[
-            { icon: "🥕", label: "Vegetables" },
-            { icon: "🍎", label: "Fruits" },
-            { icon: "🌾", label: "Grains" },
-            { icon: "🌱", label: "Pulses" },
-            { icon: "🥛", label: "Dairy" },
-          ].map(({ icon, label }) => (
-            <div key={label} className="category-card" data-category={label.toLowerCase()}>
-              <div className="category-content">
-                <div className="category-icon">{icon}</div>
-                <h3 className="category-title">{label}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
+import React from 'react';
+
+const categories = [
+  { icon: '🥦', title: 'Vegetables' },
+  { icon: '🍎', title: 'Fruits' },
+  { icon: '🌾', title: 'Grains' },
+  { icon: '🥜', title: 'Pulses' },
+  { icon: '🥛', title: 'Dairy' }
+];
+
+function ProductCategories() {
+  return (
+    <section className="product-categories">
+      <div className="categories-header">
+        <h2 className="section-title">Product Categories</h2>
       </div>
-    );
-  };
-  
-  export default ProductCategories;
-  
+      <div className="categories-grid">
+        {categories.map(({ icon, title }) => (
+          <div className="category-card" key={title}>
+            <div className="category-content">
+              <div className="category-icon">{icon}</div>
+              <div className="category-title">{title}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default ProductCategories;
