@@ -1,0 +1,60 @@
+.market-card {
+    border-radius: 12px;
+    background-color: #fefdf7; /* soft earthy background */
+    border: 1px solid #d4c9a3;
+    margin-top: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .market-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #2f6b25; /* dark green */
+    margin-bottom: 1rem;
+  }
+  
+  .card-text {
+    font-size: 1rem;
+    color: #4d4d4d;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-text strong {
+    font-weight: 600;
+    color: #7e5c28; /* brownish for labels */
+  }
+  
+  .card-text.text-muted-market {
+    font-style: italic;
+    color: #9b9b7a; /* muted earthy tone */
+  }
+  
+  @media (max-width: 768px) {
+    .market-card {
+      margin-top: 16px;
+    }
+  
+    .card-body {
+      padding: 1rem;
+    }
+  
+    .card-title {
+      font-size: 1.2rem;
+    }
+  
+    .card-text {
+      font-size: 0.95rem;
+    }
+  }
+  

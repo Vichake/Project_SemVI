@@ -16,7 +16,7 @@ const translations = {
     enterPassword: 'Enter Password',
     noAccount: "Don't have an account?",
     signup: 'Signup',
-    agrotech: 'AgroTech'
+    agrotech: 'TechKissan'
   },
   mr: {
     login: 'लॉगिन',
@@ -24,7 +24,7 @@ const translations = {
     enterPassword: 'पासवर्ड टाका',
     noAccount: 'खाते नाहीये?',
     signup: 'नोंदणी करा',
-    agrotech: 'अ‍ॅग्रोटेक'
+    agrotech: 'टेककिसान'
   }
 };
 
