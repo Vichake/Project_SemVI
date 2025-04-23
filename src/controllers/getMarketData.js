@@ -1,6 +1,6 @@
 import { Market } from '../models/market.model.js'
 
-export default async function getMarketData(req, res) {
+export const getMarketData =  async(req, res)=> {
     try {
         let marketData = await Market.find({}) //.sort({ createdAt: -1 }).limit(10).exec();
         // console.log("Market data fetched successfully", marketData);

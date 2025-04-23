@@ -1,6 +1,6 @@
 import { Product } from '../models/Products.js';
 
-export default async function addProduct(req, res) {
+export const addProduct = async (req, res)=> {
     try {
         const data = req.body;
         console.log("Received data:", data);
@@ -18,7 +18,13 @@ export default async function addProduct(req, res) {
         });
         const savedProduct = await product.save();
         // console.log("Product saved successfully:", savedProduct);
-        return res.status(201).json({ message: "Product added successfully", product: savedProduct });
+
+        const io = req.app.get('io');
+        io.of('/sell').emit('productAdded',savedProduct);
+
+        return res.status(201).json({ 
+            message: "Product added successfully",
+            product: savedProduct });
         
     } catch (error) {
         console.error("Error in adding product:", error);

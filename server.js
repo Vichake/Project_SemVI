@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
+
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js"; // Now this will work 
 import userRoutes from "./src/routes/userRoutes.js"; // Now this will work
@@ -19,5 +22,44 @@ app.use("/api/user", userRoutes);
 // app.get('/', (req,res)=>{
 //     res.send('API is running...')
 // })
+
+const server = http.createServer(app);
+
+const io = new Server(server,{
+    cors:{
+        origin:'*',
+        methods:['GET','POST']
+    }
+});
+
+app.set('io',io);
+
+const sellProduct = io.of("/sell");
+sellProduct.on('connection',(socket)=>{
+    console.log('A user connected to /sell to sellProduct');
+
+    socket.on('newProdcut',(product)=>{
+        // Broadcast new product to everyone in /sell except sender
+        socket.broadcast.emit('productAdded',product);
+    });
+
+    socket.on('disconnect',()=>{
+        console.log('User disconnected from /sell');
+    });
+});
+
+const buyProduct = io.of('/buy');
+buyProduct.on('connection', (socket) => {
+  console.log('A user connected to /buy namespace');
+
+  socket.on('newPurchase', (purchaseData) => {
+    socket.broadcast.emit('purchaseMade', purchaseData);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected from /buy');
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port http://localhost:${PORT}`));
