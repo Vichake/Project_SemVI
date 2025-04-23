@@ -13,6 +13,7 @@ function SellProductModal({ visible, onClose }) {
   useEffect(() => {
     socket.on('connect',()=>{
       console.log('Connected to /sell socket:',socket.id);
+
     })
   
     return () => {
