@@ -577,3 +577,16 @@ input, select, textarea {
   color: #999;
   font-size: 1.2rem;
 }
+
+
+.loading-message {
+  font-size: 16px;
+  color: #888;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  font-size: 16px;
+  margin-top: 10px;
+}

@@ -1,0 +1,568 @@
+/* FarmGear Rental Styles - Using farmgear- prefix for all classes to avoid conflicts */
+
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  :root {
+    --farmgear-primary-color: #1EAEDB;
+    --farmgear-secondary-color: #4CAF50;
+    --farmgear-accent-color: #FF9800;
+    --farmgear-text-dark: #1A1F2C;
+    --farmgear-text-muted: #8E9196;
+    --farmgear-text-light: #FFFFFF;
+    --farmgear-bg-light: #FFFFFF;
+    --farmgear-bg-muted: #F1F1F1;
+    --farmgear-border-color: #E5E7EB;
+    --farmgear-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --farmgear-radius: 0.5rem;
+  }
+  
+  .farmgear-rental-container {
+    background-color: var(--farmgear-bg-light);
+    color: var(--farmgear-text-dark);
+    line-height: 1.6;
+  }
+  
+  .farmgear-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Animation classes */
+  @keyframes farmgearFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .farmgear-animate-fade-in {
+    animation: farmgearFadeIn 0.8s ease-out forwards;
+  }
+  
+  /* Button styles */
+  .farmgear-rental-container button {
+    cursor: pointer;
+    border: none;
+    font-weight: 500;
+    border-radius: var(--farmgear-radius);
+    transition: all 0.3s ease;
+  }
+  
+  .farmgear-cta-button {
+    background-color: var(--farmgear-primary-color);
+    color: var(--farmgear-text-light);
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    border-radius: var(--farmgear-radius);
+    box-shadow: var(--farmgear-shadow);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .farmgear-cta-button:hover {
+    transform: scale(1.05);
+    background-color: #0b99c6;
+  }
+  
+  /* Hero Section */
+  .farmgear-hero-section {
+    position: relative;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #f0f7ff, #ffffff);
+  }
+  
+  .farmgear-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1500076898857-ad1ff4074429?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2;
+    z-index: 0;
+  }
+  
+  .farmgear-hero-content {
+    text-align: center;
+    max-width: 768px;
+    margin: 0 auto;
+    z-index: 1;
+    position: relative;
+  }
+  
+  .farmgear-hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--farmgear-text-dark);
+  }
+  
+  .farmgear-hero-description {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: var(--farmgear-text-muted);
+  }
+  
+  /* Equipment Section */
+  .farmgear-equipment-section {
+    padding: 4rem 1rem;
+    background-color: var(--farmgear-bg-light);
+  }
+  
+  .farmgear-section-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .farmgear-category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .farmgear-filter-button {
+    padding: 0.5rem 1rem;
+    background-color: var(--farmgear-bg-light);
+    border: 1px solid var(--farmgear-border-color);
+    color: var(--farmgear-text-dark);
+    border-radius: var(--farmgear-radius);
+    font-weight: 500;
+  }
+  
+  .farmgear-filter-button.farmgear-active {
+    background-color: var(--farmgear-primary-color);
+    color: var(--farmgear-text-light);
+    border-color: var(--farmgear-primary-color);
+  }
+  
+  .farmgear-equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .farmgear-equipment-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .farmgear-hero-title {
+      font-size: 3.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .farmgear-equipment-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .farmgear-equipment-card {
+    border-radius: var(--farmgear-radius);
+    overflow: hidden;
+    box-shadow: var(--farmgear-shadow);
+    background-color: var(--farmgear-bg-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .farmgear-equipment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .farmgear-equipment-image {
+    height: 12rem;
+    overflow: hidden;
+  }
+  
+  .farmgear-equipment-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .farmgear-equipment-card:hover .farmgear-equipment-image img {
+    transform: scale(1.1);
+  }
+  
+  .farmgear-equipment-content {
+    padding: 1.5rem;
+  }
+  
+  .farmgear-equipment-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .farmgear-equipment-description {
+    font-size: 0.875rem;
+    color: var(--farmgear-text-muted);
+    margin-bottom: 1rem;
+  }
+  
+  .farmgear-equipment-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--farmgear-text-muted);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .farmgear-equipment-actions {
+    margin-top: 1rem;
+  }
+  
+  .farmgear-rent-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--farmgear-primary-color);
+    color: var(--farmgear-text-light);
+    border-radius: var(--farmgear-radius);
+    font-weight: 500;
+  }
+  
+  /* Modal Styles */
+  .farmgear-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    overflow-y: auto;
+  }
+  
+  .farmgear-modal.farmgear-modal-open {
+    display: block;
+  }
+  
+  .farmgear-modal-content {
+    background-color: var(--farmgear-bg-light);
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: var(--farmgear-radius);
+    width: 90%;
+    max-width: 800px;
+    position: relative;
+  }
+  
+  .farmgear-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .farmgear-modal-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .farmgear-modal-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .farmgear-modal-header p {
+    color: var(--farmgear-text-muted);
+    font-size: 0.875rem;
+  }
+  
+  .farmgear-modal-body {
+    display: grid;
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .farmgear-modal-body {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .farmgear-equipment-price, .farmgear-equipment-stock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .farmgear-equipment-stock {
+    color: var(--farmgear-secondary-color);
+  }
+  
+  .farmgear-models-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .farmgear-model-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: var(--farmgear-bg-light);
+    border: 1px solid var(--farmgear-border-color);
+    border-radius: var(--farmgear-radius);
+    transition: all 0.2s ease;
+  }
+  
+  .farmgear-model-button:hover {
+    background-color: var(--farmgear-bg-muted);
+  }
+  
+  .farmgear-model-price {
+    font-size: 0.75rem;
+    color: var(--farmgear-text-muted);
+  }
+  
+  /* Form Styles */
+  .farmgear-form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .farmgear-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .farmgear-form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--farmgear-border-color);
+    border-radius: var(--farmgear-radius);
+    font-size: 1rem;
+  }
+  
+  .farmgear-form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .farmgear-form-actions button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--farmgear-primary-color);
+    color: var(--farmgear-text-light);
+    border-radius: var(--farmgear-radius);
+    font-weight: 500;
+  }
+  
+  /* Toast Notification */
+  .farmgear-toast {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: var(--farmgear-bg-light);
+    border-radius: var(--farmgear-radius);
+    box-shadow: var(--farmgear-shadow);
+    padding: 1rem;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    z-index: 1000;
+  }
+  
+  .farmgear-toast-content {
+    margin-right: 1.5rem;
+  }
+  
+  /* Toast Notification (continued) */
+.farmgear-toast-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+  
+  /* Footer Styles */
+  .farmgear-footer {
+    background-color: var(--farmgear-bg-muted);
+    padding: 3rem 1rem;
+  }
+  
+  .farmgear-footer-grid {
+    display: grid;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .farmgear-footer-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .farmgear-footer-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .farmgear-footer-subtitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .farmgear-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .farmgear-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--farmgear-text-muted);
+  }
+  
+  .farmgear-faq-list {
+    list-style: none;
+  }
+  
+  .farmgear-faq-list li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .farmgear-faq-list a {
+    color: var(--farmgear-primary-color);
+    text-decoration: none;
+  }
+  
+  .farmgear-faq-list a:hover {
+    text-decoration: underline;
+  }
+  
+  .farmgear-footer-divider {
+    height: 1px;
+    background-color: var(--farmgear-border-color);
+    margin: 2rem 0;
+  }
+  
+  .farmgear-copyright {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--farmgear-text-muted);
+  }
+  
+  /* Icons */
+  .farmgear-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .farmgear-price-icon,
+  .farmgear-stock-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Additional Animation Refinements */
+  .farmgear-equipment-card {
+    animation: farmgearFadeIn 0.5s ease-out forwards;
+    animation-delay: calc(0.1s * var(--i, 0));
+    opacity: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .farmgear-hero-title {
+      font-size: 2rem;
+    }
+    
+    .farmgear-hero-description {
+      font-size: 1rem;
+    }
+    
+    .farmgear-cta-button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+    }
+    
+    .farmgear-category-filter {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+    }
+    
+    .farmgear-filter-button {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+  }
+  
+  /* Accessibility improvements */
+  .farmgear-rental-container button:focus,
+  .farmgear-rental-container a:focus,
+  .farmgear-rental-container input:focus {
+    outline: 2px solid var(--farmgear-primary-color);
+    outline-offset: 2px;
+  }
+  
+  /* Dark mode support (optional) */
+  @media (prefers-color-scheme: dark) {
+    .farmgear-rental-container.farmgear-dark-mode {
+      --farmgear-text-dark: #F1F1F1;
+      --farmgear-text-muted: #B0B0B0;
+      --farmgear-text-light: #FFFFFF;
+      --farmgear-bg-light: #1A1F2C;
+      --farmgear-bg-muted: #2A2F3C;
+      --farmgear-border-color: #4A4F5C;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .farmgear-hero-section,
+    .farmgear-category-filter,
+    .farmgear-rent-button,
+    .farmgear-modal {
+      display: none !important;
+    }
+    
+    .farmgear-equipment-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .farmgear-equipment-card {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      box-shadow: none;
+      border: 1px solid #ddd;
+    }
+  }

@@ -31,7 +31,7 @@ const Header = ({userData}) => {
           <nav className="navbar-menu">
             <Link to="/home" className="navbar-link">Home</Link>
             <Link to="/nearby-markets" className="navbar-link">Nearby Markets</Link>
-            <Link to="/sell-products" className="navbar-link">Sell Your Products</Link>
+            <Link to="/sell-products" className="navbar-link">Buy/Sell Products</Link>
             <Link to="/rent-instruments" className="navbar-link">Rent Instruments</Link>
             <Link to="/learn-techniques" className="navbar-link">Learn New Techniques</Link>
             <Link to="/govt-schemes" className="navbar-link">Government Schemes</Link>

@@ -186,6 +186,6 @@ const handleSignup = async (e) => {
       </div>
     </div>
   );
-};
+}; 
 
 export default Signup;

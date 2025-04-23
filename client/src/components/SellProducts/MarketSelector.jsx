@@ -7,19 +7,25 @@ function MarketSelector({ activeMarket, onMarketChange }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [productPrices, setProductPrices] = useState({});
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [timeoutError, setTimeoutError] = useState(false);
 
   useEffect(() => {
     const fetchPrices = async () => {
+      setLoading(true);
+      setTimeoutError(false); // Reset timeout error state on each request
+
       const prices = {};
       const productsSet = new Set();
-      const api_key = '579b464db66ec23bdd0000010347ed9f0c9248565d0b3fca2d6deba7';
-      const limit = 5000;
+      const api_key = '579b464db66ec23bdd000001f41e1501d3504c6046bc7b79cb295eb9';
+      const limit = 25000;
 
       try {
         const response = await Axios.get(
           `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${api_key}&format=json&limit=${limit}`,
           {
-            params: { market: activeMarket }
+            params: { market: activeMarket },
+            timeout: 10000, 
           }
         );
 
@@ -35,7 +41,7 @@ function MarketSelector({ activeMarket, onMarketChange }) {
           prices[product] = {
             minPrice: item.min_price,
             maxPrice: item.max_price,
-            modalPrice: item.modal_price
+            modalPrice: item.modal_price,
           };
         });
 
@@ -43,7 +49,13 @@ function MarketSelector({ activeMarket, onMarketChange }) {
         setProductPrices(prices);
       } catch (error) {
         console.error('Error fetching data:', error);
-        toast.error('Error fetching data. Please try again later.', { position: 'bottom-center' });
+        if (error.code === 'ECONNABORTED') {
+          setTimeoutError(true); // Set timeout error flag
+        } else {
+          toast.error('Error fetching data. Please try again later.', { position: 'bottom-center' });
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -76,16 +88,26 @@ function MarketSelector({ activeMarket, onMarketChange }) {
           </button>
         ))}
       </div>
-      <div className='.search-input-container'>
+      
+      <div className="search-input-container">
         <input
-        
-        type="text"
-        placeholder="Search for product..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="search-input"
+          type="text"
+          placeholder="Search for product..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="search-input"
         />
       </div>
+
+      {/* Loading state */}
+      {loading && <p className="loading-message">Loading prices, please wait...</p>}
+
+      {/* Timeout error message */}
+      {timeoutError && (
+        <p className="error-message">
+          The request is taking too long. Please try again later.
+        </p>
+      )}
 
       <div className="market-prices">
         {filteredProducts.length === 0 ? (

@@ -6,8 +6,7 @@ import { toast } from 'react-toastify';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
-const url = 'http://localhost:5000/api'; 
+const url = 'http://localhost:5000/api';
 
 const translations = {
   en: {
@@ -30,7 +29,7 @@ const translations = {
 
 const Login = () => {
   const [lang, setLang] = useState('en');
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -46,29 +45,48 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-    // alert(`Logging in as ${formData.email}`);
-  
+    e.preventDefault();
+    const { email, password } = formData;
+
+    if (!email || !password) {
+      toast.warn("Please enter both email and password.", { position: 'bottom-center' });
+      return;
+    }
+
+    setLoading(true);
     try {
+      // Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        toast.info("Please verify your email before logging in.", { position: 'bottom-center' });
+        setLoading(false);
+        return;
+      }
+
+      // MongoDB backend check
       const response = await Axios.post(`${url}/login`, formData);
-  
+
       if (response.status === 200) {
         toast.success('Login successful!', { position: 'bottom-center' });
-  
-        console.log('Login successful:', response.data);
-        const { token, user } = response.data;
-        localStorage.setItem('token', token); // Store token in local storage
-        localStorage.setItem('user', JSON.stringify(user)); // Store user data in local storage
-        navigate('/home'); // Redirect to homepage or dashboard 
-        
+        // console.log('Login successful:', response.data);
+        const { idToken, user } = response.data;
+        localStorage.setItem('token', idToken);
+        localStorage.setItem('user', JSON.stringify(user));
+
+        navigate('/home');
       } else {
         toast.error('Login failed. Please try again.', { position: 'bottom-center' });
       }
     } catch (error) {
-      const msg = error.response?.data?.message || 'Something went wrong';
+      const msg = error.response?.data?.message || error.message || 'Something went wrong';
       toast.error(`❌ Login failed: ${msg}`, { position: 'bottom-center' });
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   const changeLanguage = (e) => {
     setLang(e.target.value);
   };
@@ -84,8 +102,9 @@ const Login = () => {
           </select>
         </div>
 
-        <form className="login-form" onSubmit={(e) => { e.preventDefault(); handleLogin(e);}}>
+        <form className="login-form" onSubmit={handleLogin}>
           <h2>{translations[lang].login}</h2>
+
           <input
             type="email"
             name="email"
@@ -102,8 +121,8 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-          <button type="submit">
-            {translations[lang].login}
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : translations[lang].login}
           </button>
 
           <div className="login-footer">

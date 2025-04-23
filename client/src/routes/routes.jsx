@@ -4,6 +4,8 @@ import Signup from '../pages/public/register.jsx';
 import Home from '../pages/private/Home.jsx';
 import Nearby from '../pages/private/Nearby.jsx';
 import SellProducts from '../pages/private/SellProducts.jsx';
+import RentInstruments from '../pages/private/RentInstruments.jsx';
+
 import React from 'react';
 import PrivateRoute from '../components/PrivateRoute.jsx';
 import { path } from 'framer-motion/client';
@@ -51,6 +53,13 @@ const routes = [
     element: (
       <PrivateRoute>
         <SellProducts />
+      </PrivateRoute>
+    ),
+  },{
+    path: '/rent-instruments',
+    element: (
+      <PrivateRoute>
+        <RentInstruments />
       </PrivateRoute>
     ),
   }
