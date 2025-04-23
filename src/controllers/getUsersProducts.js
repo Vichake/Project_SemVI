@@ -1,9 +1,17 @@
 import { Product } from "../models/Products.js";
 import { User } from "../models/user.model.js";
 
-export const getProducts = async(req,res)=>{
+export const getUsersProducts = async(req,res)=>{
     try {
-        const products = await Product.find().sort({createdAt: -1});
+        const firebaseUID = req.user.uid;
+
+        const user = await User.findOne({ firebaseUID });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const products = await Product.find({user: user._id}).sort({createdAt: -1});
 
         if(!products.length){
             return res.status(404).json({message: "No products found"});
