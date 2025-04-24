@@ -3,6 +3,7 @@ import Axios from 'axios'
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/userContext.jsx';
 import { io } from 'socket.io-client';
+import { sellSocket } from '../../socket.js';
 
 const url = 'http://localhost:5000/api'; // Replace with your API URL
 const socket = io('http://localhost:5000/sell');
@@ -11,15 +12,14 @@ function SellProductModal({ visible, onClose }) {
   const { userData } = useUser();
 
   useEffect(() => {
-    socket.on('connect',()=>{
-      console.log('Connected to /sell socket:',socket.id);
-
-    })
+    sellSocket.on('connect', () => {
+      console.log('Connected to /sell:', sellSocket.id);
+    });
   
     return () => {
-      socket.disconnect();
-    }
-  }, [])
+      sellSocket.off('connect');
+    };
+  }, []);
   
 
   const handleSubmit = async (event) => {
@@ -37,21 +37,21 @@ function SellProductModal({ visible, onClose }) {
     data.user = userData._id;
   
     try {
-      const response = await Axios.post(
-        `${url}/user/addProduct`,
-        JSON.stringify(data),
-        {
-          headers: {
-            'Authorization': `Bearer ${userData.idToken}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await fetch(`${url}/user/addProduct`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${userData.idToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
       
-  
-      if (response.status === 201) {
+      
+
+      if (response.ok) {
         toast.success('Product submitted successfully!', { position: 'bottom-center' });
-        
+        const resData = await response.json();
+        sellSocket.emit('product-added', resData.product);
         socket.emit('product-added', response.data.product);
 
         onClose(); // Close the modal only on success
