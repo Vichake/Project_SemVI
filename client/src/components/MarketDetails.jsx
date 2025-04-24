@@ -7,7 +7,7 @@ import { useUser } from '../../context/userContext.jsx';
 import './css/Nearby.css';
 
 const Nearby = () => {
-  const url = 'http://localhost:5000/api';
+  const url = 'http://localhost:5000';
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);

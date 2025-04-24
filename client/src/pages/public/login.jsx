@@ -15,7 +15,7 @@ const translations = {
     enterPassword: 'Enter Password',
     noAccount: "Don't have an account?",
     signup: 'Signup',
-    agrotech: 'TechKissan'
+    agrotech: 'TechKisan'
   },
   mr: {
     login: 'लॉगिन',

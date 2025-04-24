@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Axios from 'axios'
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/userContext.jsx';
@@ -6,41 +6,52 @@ import { io } from 'socket.io-client';
 import { connectSellSocket } from '../../socket.js';
 
 const url = 'http://localhost:5000'; // Replace with your API URL
-// const socket = io('http://localhost:5000/sell');
 
 function SellProductModal({ visible, onClose }) {
   const { userData } = useUser();
 
-  // useEffect(() => {
-  //   const socket = connectSellSocket();
-  //   socket.on('connect', () => {
-  //     console.log('Connected to /sell:', socket.id);
-  //   });
+  const socketRef = useRef(null);
+
+  useEffect(() => {
+    if (!visible) return;
+    const socket = connectSellSocket();
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      console.log('Connected to /sell:', socket.id);
+    });
   
-  //   return () => {
-  //     socket.disconnect(); // optional: clean up if needed
-  //   };
-  // }, []);
+    return () => {
+      socket.disconnect(); // optional: clean up if needed
+      socketRef.current = null;
+    };
+  }, [visible]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-  
+    const idToken = localStorage.getItem('token')
+    console.log(idToken);
+    
+    console.log('Form data:', data);
+    console.log('User data:', userData._id);
     // Attach user ID
-    if (!userData?._id || !userData?.idToken) {
+    if (!userData?._id || !idToken) {
       toast.error('User not authenticated.', { position: 'bottom-center' });
+      console.error('User not authenticated:', userData);
       return;
     }
 
     data.user = userData._id;
+
   
     try {
       const response = await fetch(`${url}/user/addProduct`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${userData.idToken}`,
+          'Authorization': `Bearer ${idToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
@@ -52,7 +63,7 @@ function SellProductModal({ visible, onClose }) {
         toast.success('Product submitted successfully!', { position: 'bottom-center' });
         const resData = await response.json();
         // sellSocket.emit('product-added', resData.product);
-        socket.emit('product-added', response.data.product);
+        socketRef.current?.emit('product-added', resData.product);
 
         onClose(); // Close the modal only on success
       } else {

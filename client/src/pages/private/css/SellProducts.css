@@ -590,3 +590,76 @@ input, select, textarea {
   font-size: 16px;
   margin-top: 10px;
 }
+
+
+.pcl-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.pcl-title {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.pcl-error {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.pcl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.pcl-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s ease;
+}
+
+.pcl-card:hover {
+  transform: translateY(-3px);
+}
+
+.pcl-card-title {
+  margin-top: 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+}
+
+.pcl-card-description {
+  color: #555;
+  margin: 10px 0;
+}
+
+.pcl-info {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 4px 0;
+}
+
+.pcl-timestamp {
+  display: block;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 10px;
+}
+
+.pcl-delete-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pcl-delete-btn:hover {
+  background-color: #c0392b;
+}
