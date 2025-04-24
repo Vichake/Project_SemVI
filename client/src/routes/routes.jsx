@@ -5,6 +5,7 @@ import Home from '../pages/private/Home.jsx';
 import Nearby from '../pages/private/Nearby.jsx';
 import SellProducts from '../pages/private/SellProducts.jsx';
 import RentInstruments from '../pages/private/RentInstruments.jsx';
+import Schemes from '../pages/private/Schemes.jsx';
 
 import React from 'react';
 import PrivateRoute from '../components/PrivateRoute.jsx';
@@ -60,6 +61,14 @@ const routes = [
     element: (
       <PrivateRoute>
         <RentInstruments />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: '/govt-schemes',
+    element: (
+      <PrivateRoute>
+        <Schemes />
       </PrivateRoute>
     ),
   }

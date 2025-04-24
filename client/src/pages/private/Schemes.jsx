@@ -1,157 +1,499 @@
 import React, { useState, useEffect } from 'react';
+import { useUser } from '../../context/userContext.jsx';
+import Header from '../../components/Header.jsx';
+import './css/Schemes.css'
 
-// Dummy scheme data for demonstration
-const schemes = {
-  national: [
-    {
-      id: 1,
-      title: "PM Kisan Samman Nidhi",
-      description: "Financial assistance to small and marginal farmers through direct benefit transfer.",
-      image: "/api/placeholder/400/250",
-      category: "Financial Aid",
-      deadline: "Dec 31, 2025",
-      region: "All India"
-    },
-    {
-      id: 2,
-      title: "Pradhan Mantri Fasal Bima Yojana",
-      description: "Crop insurance scheme to protect farmers against crop failure due to natural calamities.",
-      image: "/api/placeholder/400/250",
-      category: "Insurance",
-      deadline: "Seasonal",
-      region: "All India"
-    },
-    {
-      id: 3,
-      title: "Soil Health Card Scheme",
-      description: "Soil testing and recommendations for farmers to improve productivity through judicious use of inputs.",
-      image: "/api/placeholder/400/250",
-      category: "Agricultural Support",
-      deadline: "Ongoing",
-      region: "All India"
+const AgriSchemes = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('national');
+  const [currentStep, setCurrentStep] = useState(1);
+  const { userData } = useUser();
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    // Initialize feather icons
+    if (window.feather) {
+      window.feather.replace();
     }
-  ],
-  state: [
-    {
-      id: 1,
-      title: "Karnataka Raitha Suraksha Pradhan Mantri Fasal Bima Yojana",
-      description: "State extension of PMFBY with additional benefits for farmers in Karnataka.",
-      image: "/api/placeholder/400/250",
-      category: "Insurance",
-      deadline: "Seasonal",
-      region: "Karnataka"
-    },
-    {
-      id: 2,
-      title: "Punjab Crop Loan Waiver Scheme",
-      description: "Loan waiver for small and marginal farmers with landholdings up to 5 acres.",
-      image: "/api/placeholder/400/250",
-      category: "Financial Relief",
-      deadline: "June 30, 2025",
-      region: "Punjab"
-    },
-    {
-      id: 3,
-      title: "Maharashtra Farm Pond on Demand Scheme",
-      description: "Provides financial assistance to farmers for construction of farm ponds.",
-      image: "/api/placeholder/400/250",
-      category: "Water Management",
-      deadline: "Ongoing",
-      region: "Maharashtra"
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+  
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+  
+  const nextStep = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
     }
-  ],
-  specialized: [
-    {
-      id: 1,
-      title: "Tribal Sub-Plan for Agriculture",
-      description: "Special agricultural assistance program for tribal farmers and communities.",
-      image: "/api/placeholder/400/250",
-      category: "Tribal Support",
-      deadline: "Ongoing",
-      region: "Tribal Regions"
-    },
-    {
-      id: 2,
-      title: "Women Farmers Empowerment Program",
-      description: "Focused initiatives for women in agriculture including training and subsidies.",
-      image: "/api/placeholder/400/250",
-      category: "Women's Empowerment",
-      deadline: "Dec 15, 2025",
-      region: "All India"
-    },
-    {
-      id: 3,
-      title: "Organic Farming Incentive Scheme",
-      description: "Financial support and certification assistance for farmers transitioning to organic methods.",
-      image: "/api/placeholder/400/250",
-      category: "Organic Farming",
-      deadline: "Ongoing",
-      region: "All India"
+  };
+  
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
     }
-  ]
-};
-
-// Feather Icons Component
-const FeatherIcon = ({ name, size }) => {
+  };
+  
+  // Mock data for schemes
+  const schemes = {
+    national: [
+      {
+        title: "PM-KISAN Scheme",
+        category: "Financial Support",
+        description: "Income support of ₹6,000 per year in three equal installments to small and marginal farmer families.",
+        eligibility: "All small & marginal farmers",
+        deadline: "Ongoing"
+      },
+      {
+        title: "Pradhan Mantri Fasal Bima Yojana",
+        category: "Insurance",
+        description: "Comprehensive risk coverage for crop cycle from pre-sowing to post-harvest losses due to non-preventable risks.",
+        eligibility: "All farmers with insurable crops",
+        deadline: "Seasonal enrollment"
+      },
+      {
+        title: "National Mission for Sustainable Agriculture",
+        category: "Sustainable Farming",
+        description: "Promoting sustainable agriculture through climate change adaptation measures, water use efficiency, and soil health management.",
+        eligibility: "All farmers",
+        deadline: "Ongoing"
+      }
+    ],
+    state: [
+      {
+        title: "Karnataka Raitha Siri",
+        category: "Financial Support",
+        description: "Direct income support for farmers in Karnataka state with additional benefits for organic farming practices.",
+        eligibility: "Karnataka farmers",
+        deadline: "Annual registration"
+      },
+      {
+        title: "Punjab Pani Bachao Paise Kamao",
+        category: "Water Conservation",
+        description: "Financial incentives for farmers to save water during paddy cultivation through direct benefit transfer.",
+        eligibility: "Punjab farmers",
+        deadline: "Seasonal"
+      }
+    ],
+    specialized: [
+      {
+        title: "Tribal Sub-Plan for Agriculture",
+        category: "Tribal Development",
+        description: "Special assistance for tribal farmers including subsidized equipment, seeds, and training programs.",
+        eligibility: "Tribal farmers",
+        deadline: "Ongoing"
+      },
+      {
+        title: "Women Farmers Empowerment Programme",
+        category: "Gender Support",
+        description: "Special provisions for training, credit linkage, and equipment support focused on women in agriculture.",
+        eligibility: "Women farmers",
+        deadline: "Quarterly enrollment"
+      }
+    ]
+  };
+  
   return (
-    <svg 
-      width={size || 24} 
-      height={size || 24} 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className="as-feather-icon"
-    >
-      {name === 'menu' && <path d="M3 12h18M3 6h18M3 18h18" />}
-      {name === 'x' && <path d="M18 6L6 18M6 6l12 12" />}
-      {name === 'search' && <>
-        <circle cx="11" cy="11" r="8" />
-        <path d="M21 21l-4.35-4.35" />
-      </>}
-      {name === 'arrow-right' && <path d="M5 12h14M12 5l7 7-7 7" />}
-      {name === 'feather' && <>
-        <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-        <path d="M16 8L2 22" />
-        <path d="M17.5 15H9" />
-      </>}
-      {name === 'dollar-sign' && <>
-        <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-      </>}
-      {name === 'users' && <>
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-      </>}
-      {name === 'filter' && <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />}
-      {name === 'calendar' && <>
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-        <path d="M16 2v4M8 2v4M3 10h18" />
-      </>}
-      {name === 'map-pin' && <>
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </>}
-      {name === 'chevron-down' && <path d="M6 9l6 6 6-6" />}
-      {name === 'check-circle' && <>
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-        <path d="M22 4L12 14.01l-3-3" />
-      </>}
-      {name === 'facebook' && <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />}
-      {name === 'twitter' && <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />}
-      {name === 'instagram' && <>
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-        <path d="M17.5 6.5h.01" />
-      </>}
-      {name === 'youtube' && <>
-        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-        <path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" />
-      </>}
-    </svg>
+    <div className="as-root">
+      <Header userData={userData} />
+      <main>
+        {/* Hero Section */}
+        <section className="as-hero">
+          <div className="as-hero-bg">
+            <div className="as-hero-gradient"></div>
+            <div className="as-hero-circle as-hero-circle-1"></div>
+            <div className="as-hero-circle as-hero-circle-2"></div>
+          </div>
+
+          <div className="as-container">
+            <div className="as-hero-content">
+              <div className="as-badge as-fade-in">Empowering Farmers Across India</div>
+              <h1 className="as-hero-title as-fade-in">
+                Discover Government Schemes
+                <span className="as-text-primary">Made for Farmers</span>
+              </h1>
+              <p className="as-hero-description as-fade-in">
+                Navigate through all available government initiatives designed to support 
+                agricultural growth, financial assistance, and sustainable farming practices.
+              </p>
+              <div className="as-hero-actions as-fade-in">
+                <a href="/eligibility" className="as-btn as-btn-primary as-btn-lg">
+                  Find Eligible Schemes
+                  <i data-feather="arrow-right"></i>
+                </a>
+                <a href="/schemes" className="as-btn as-btn-outline as-btn-lg">
+                  Browse All Schemes
+                </a>
+              </div>
+            </div>
+
+            <div className="as-hero-cards as-fade-in">
+              <div className="as-glass-card">
+                <div className="as-card-icon">
+                  <i data-feather="feather"></i>
+                </div>
+                <h3 className="as-card-title">Agricultural Support</h3>
+                <p className="as-card-text">Access schemes focused on crop improvement, irrigation, and farming techniques.</p>
+              </div>
+
+              <div className="as-glass-card">
+                <div className="as-card-icon">
+                  <i data-feather="dollar-sign"></i>
+                </div>
+                <h3 className="as-card-title">Financial Assistance</h3>
+                <p className="as-card-text">Discover subsidies, loans, and insurance options available for farmers.</p>
+              </div>
+
+              <div className="as-glass-card">
+                <div className="as-card-icon">
+                  <i data-feather="users"></i>
+                </div>
+                <h3 className="as-card-title">Community Programs</h3>
+                <p className="as-card-text">Join initiatives designed to strengthen farmer communities and knowledge sharing.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Schemes Section */}
+        <section className="as-featured-schemes">
+          <div className="as-container">
+            <div className="as-section-header">
+              <div className="as-badge">Explore Available Schemes</div>
+              <h2 className="as-section-title">Featured Government Initiatives</h2>
+              <p className="as-section-description">
+                Discover key programs designed to support various aspects of farming and agriculture
+              </p>
+            </div>
+
+            <div className="as-schemes-tabs">
+              <div className="as-tabs-list">
+                <button 
+                  className={`as-tab ${activeTab === 'national' ? 'as-active' : ''}`} 
+                  onClick={() => handleTabChange('national')}
+                >
+                  National
+                </button>
+                <button 
+                  className={`as-tab ${activeTab === 'state' ? 'as-active' : ''}`} 
+                  onClick={() => handleTabChange('state')}
+                >
+                  State-level
+                </button>
+                <button 
+                  className={`as-tab ${activeTab === 'specialized' ? 'as-active' : ''}`} 
+                  onClick={() => handleTabChange('specialized')}
+                >
+                  Specialized
+                </button>
+              </div>
+
+              <div className="as-schemes-content">
+                {Object.keys(schemes).map((schemeType) => (
+                  <div 
+                    key={schemeType}
+                    className={`as-schemes-grid ${activeTab === schemeType ? 'as-active' : ''}`} 
+                    id={`${schemeType}-schemes`}
+                  >
+                    {schemes[schemeType].map((scheme, index) => (
+                      <div key={index} className="as-scheme-card">
+                        <div className="as-scheme-image">
+                          <img src={`/api/placeholder/400/240`} alt={scheme.title} />
+                          <div className="as-scheme-image-overlay"></div>
+                          <div className="as-scheme-image-content">
+                            <span className="as-scheme-category">{scheme.category}</span>
+                            <h3 className="as-scheme-title">{scheme.title}</h3>
+                          </div>
+                        </div>
+                        <div className="as-scheme-content">
+                          <p className="as-scheme-description">{scheme.description}</p>
+                          <div className="as-scheme-meta">
+                            <div className="as-scheme-meta-item">
+                              <i data-feather="users"></i>
+                              <span>Eligibility: {scheme.eligibility}</span>
+                            </div>
+                            <div className="as-scheme-meta-item">
+                              <i data-feather="calendar"></i>
+                              <span>Deadline: {scheme.deadline}</span>
+                            </div>
+                          </div>
+                          <button className="as-scheme-button">
+                            <span>View Details</span>
+                            <i data-feather="arrow-right"></i>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+
+                <div className="as-schemes-footer">
+                  <a href="/schemes" className="as-btn as-btn-outline as-btn-lg">
+                    View All <span className="as-current-scheme-type">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</span> Schemes
+                    <i data-feather="arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Eligibility Checker Section */}
+        <section className="as-eligibility-checker">
+          <div className="as-container">
+            <div className="as-eligibility-grid">
+              <div className="as-eligibility-content">
+                <div className="as-badge">Personalized Recommendations</div>
+                <h2 className="as-eligibility-title">
+                  Find Schemes You're <span className="as-text-primary">Eligible For</span>
+                </h2>
+                <p className="as-eligibility-description">
+                  Answer a few questions about your farm and situation, and we'll identify government schemes 
+                  you may qualify for based on your profile and requirements.
+                </p>
+                
+                <div className="as-eligibility-features">
+                  <div className="as-feature-item">
+                    <div className="as-feature-icon">
+                      <i data-feather="check-circle"></i>
+                    </div>
+                    <div>
+                      <h3 className="as-feature-title">Personalized Recommendations</h3>
+                      <p className="as-feature-text">Get schemes that match your specific farming situation</p>
+                    </div>
+                  </div>
+                  
+                  <div className="as-feature-item">
+                    <div className="as-feature-icon">
+                      <i data-feather="check-circle"></i>
+                    </div>
+                    <div>
+                      <h3 className="as-feature-title">Save Time Researching</h3>
+                      <p className="as-feature-text">Quickly find relevant schemes instead of searching manually</p>
+                    </div>
+                  </div>
+                  
+                  <div className="as-feature-item">
+                    <div className="as-feature-icon">
+                      <i data-feather="check-circle"></i>
+                    </div>
+                    <div>
+                      <h3 className="as-feature-title">Application Guidance</h3>
+                      <p className="as-feature-text">Get information on how to apply for each recommended scheme</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="as-eligibility-form-container">
+                <div className="as-eligibility-card">
+                  <div className="as-eligibility-card-header">
+                    <h3 className="as-eligibility-card-title">Eligibility Checker</h3>
+                    <div className="as-steps-indicator">
+                      <span className={`as-step ${currentStep >= 1 ? 'as-active' : ''}`}></span>
+                      <span className={`as-step ${currentStep >= 2 ? 'as-active' : ''}`}></span>
+                      <span className={`as-step ${currentStep >= 3 ? 'as-active' : ''}`}></span>
+                    </div>
+                  </div>
+                  
+                  <div className="as-eligibility-card-body">
+                    {/* Step 1 */}
+                    <div className={`as-eligibility-step ${currentStep === 1 ? 'as-active' : ''}`} id="step-1">
+                      <h3 className="as-step-title">Location Information</h3>
+                      
+                      <div className="as-form-group">
+                        <label htmlFor="state">State</label>
+                        <div className="as-select-wrapper">
+                          <select id="state" name="state">
+                            <option value="" disabled selected>Select your state</option>
+                            <option value="andhra-pradesh">Andhra Pradesh</option>
+                            <option value="assam">Assam</option>
+                            <option value="bihar">Bihar</option>
+                            <option value="gujarat">Gujarat</option>
+                            <option value="karnataka">Karnataka</option>
+                            <option value="kerala">Kerala</option>
+                            <option value="madhya-pradesh">Madhya Pradesh</option>
+                            <option value="maharashtra">Maharashtra</option>
+                            <option value="punjab">Punjab</option>
+                            <option value="tamil-nadu">Tamil Nadu</option>
+                            <option value="uttar-pradesh">Uttar Pradesh</option>
+                            <option value="west-bengal">West Bengal</option>
+                          </select>
+                          <i data-feather="chevron-down"></i>
+                        </div>
+                      </div>
+                      
+                      <div className="as-form-group">
+                        <label htmlFor="district">District</label>
+                        <input type="text" id="district" name="district" placeholder="Enter your district" />
+                      </div>
+                      
+                      <div className="as-form-actions">
+                        <button type="button" className="as-btn as-btn-primary as-btn-block as-next-step" onClick={nextStep}>
+                          Continue
+                          <i data-feather="arrow-right"></i>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Step 2 */}
+                    <div className={`as-eligibility-step ${currentStep === 2 ? 'as-active' : ''}`} id="step-2">
+                      <h3 className="as-step-title">Farm Details</h3>
+                      
+                      <div className="as-form-group">
+                        <label htmlFor="landSize">Land Size (in acres)</label>
+                        <input type="number" id="landSize" name="landSize" placeholder="Enter land size" />
+                      </div>
+                      
+                      <div className="as-form-group">
+                        <label>Land Ownership</label>
+                        <div className="as-radio-group">
+                          <div className="as-radio-item">
+                            <input type="radio" id="owned" name="landOwnership" value="owned" />
+                            <label htmlFor="owned">Owned Land</label>
+                          </div>
+                          <div className="as-radio-item">
+                            <input type="radio" id="leased" name="landOwnership" value="leased" />
+                            <label htmlFor="leased">Leased Land</label>
+                          </div>
+                          <div className="as-radio-item">
+                            <input type="radio" id="both" name="landOwnership" value="both" />
+                            <label htmlFor="both">Both Owned & Leased</label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="as-form-group">
+                        <label htmlFor="farmerCategory">Farmer Category</label>
+                        <div className="as-select-wrapper">
+                          <select id="farmerCategory" name="farmerCategory">
+                            <option value="" disabled selected>Select your category</option>
+                            <option value="marginal">Marginal Farmer (&lt; 1 hectare)</option>
+                            <option value="small">Small Farmer (1-2 hectares)</option>
+                            <option value="medium">Medium Farmer (2-10 hectares)</option>
+                            <option value="large">Large Farmer (&gt; 10 hectares)</option>
+                          </select>
+                          <i data-feather="chevron-down"></i>
+                        </div>
+                      </div>
+                      
+                      <div className="as-form-actions">
+                        <button type="button" className="as-btn as-btn-outline as-prev-step" onClick={prevStep}>Back</button>
+                        <button type="button" className="as-btn as-btn-primary as-next-step" onClick={nextStep}>
+                          Continue
+                          <i data-feather="arrow-right"></i>
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Step 3 */}
+                    <div className={`as-eligibility-step ${currentStep === 3 ? 'as-active' : ''}`} id="step-3">
+                      <h3 className="as-step-title">Farming Information</h3>
+                      
+                      <div className="as-form-group">
+                        <label htmlFor="crop">Primary Crop</label>
+                        <div className="as-select-wrapper">
+                          <select id="crop" name="crop">
+                            <option value="" disabled selected>Select your primary crop</option>
+                            <option value="rice">Rice</option>
+                            <option value="wheat">Wheat</option>
+                            <option value="maize">Maize</option>
+                            <option value="millet">Millet</option>
+                            <option value="pulses">Pulses</option>
+                            <option value="oilseeds">Oilseeds</option>
+                            <option value="sugarcane">Sugarcane</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="vegetables">Vegetables</option>
+                          </select>
+                          <i data-feather="chevron-down"></i>
+                        </div>
+                      </div>
+                      
+                      <div className="as-form-actions">
+                        <button type="button" className="as-btn as-btn-outline as-prev-step" onClick={prevStep}>Back</button>
+                        <button type="button" className="as-btn as-btn-primary" id="find-schemes">
+                          Find Schemes
+                          <i data-feather="filter"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="as-footer">
+        <div className="as-container">
+          <div className="as-footer-grid">
+            <div className="as-footer-col">
+              <h3 className="as-footer-logo"><span className="as-text-primary">Agri</span>Schemes</h3>
+              <p className="as-footer-description">
+                Your one-stop resource for navigating government schemes and initiatives designed to 
+                support farmers and agricultural growth across India.
+              </p>
+              <div className="as-footer-social">
+                <a href="#" className="as-social-link" aria-label="Facebook">
+                  <i data-feather="facebook"></i>
+                </a>
+                <a href="#" className="as-social-link" aria-label="Twitter">
+                  <i data-feather="twitter"></i>
+                </a>
+                <a href="#" className="as-social-link" aria-label="Instagram">
+                  <i data-feather="instagram"></i>
+                </a>
+                <a href="#" className="as-social-link" aria-label="YouTube">
+                  <i data-feather="youtube"></i>
+                </a>
+              </div>
+            </div>
+            
+            <div className="as-footer-col">
+              <h3 className="as-footer-heading">Contact Information</h3>
+              <ul className="as-footer-contact">
+                <li>Ministry of Agriculture & Farmers Welfare</li>
+                <li>Krishi Bhawan, New Delhi - 110001</li>
+                <li>Email: info@agrischemes.gov.in</li>
+                <li>Helpline: 1800-111-222</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="as-footer-bottom">
+            <p className="as-copyright">
+              © <span id="current-year"></span> AgriSchemes. All rights reserved.
+            </p>
+            
+            <div className="as-footer-legal">
+              <a href="/terms">Terms of Service</a>
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/disclaimer">Disclaimer</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 };
 
-
-
+export default AgriSchemes;

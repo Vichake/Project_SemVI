@@ -1,4 +1,4 @@
-/* General Reset */
+/* Main Reset */
 * {
   margin: 0;
   padding: 0;
@@ -6,9 +6,9 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Background Section with Green Gradient */
-.login-page {
-  background: linear-gradient(to right, #a5d6a7, #81c784, #66bb6a); /* Soft green gradient */
+/* Page Background */
+.tk-auth-background {
+  background: linear-gradient(to right, #a5d6a7, #81c784, #66bb6a);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -17,22 +17,22 @@
   overflow: hidden;
 }
 
-/* Glass-effect Container */
-.login-container {
+/* Auth Card Container */
+.tk-auth-card {
   position: relative;
   background: rgba(255, 255, 255, 0.95);
   max-width: 500px;
   width: 100%;
   border-radius: 20px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  padding: 30px 25px;
+  padding: 35px 30px;
   text-align: center;
-  animation: fadeIn 1.2s ease;
+  animation: tk-fade-in 1.2s ease;
   overflow: hidden;
 }
 
-/* Optional Blur Effect Overlay */
-.login-container::before {
+/* Glass Effect */
+.tk-auth-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -45,101 +45,147 @@
   border-radius: 20px;
 }
 
-/* Header Section */
-.login-header {
-  background: linear-gradient(to right, #558b2f, #8bc34a); /* Olive to light green gradient */
+/* Title Banner */
+.tk-auth-banner {
+  background: linear-gradient(to right, #558b2f, #8bc34a);
   color: white;
-  padding: 18px 16px;
+  padding: 18px 20px;
   border-radius: 15px;
+  margin-bottom: 30px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* App Title */
+.tk-app-title {
   font-size: 1.8em;
   font-weight: bold;
-  position: relative;
-  margin-bottom: 25px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.login-header select {
+/* Language Selector */
+.tk-language-selector {
   position: absolute;
-  top: 12px;
-  right: 15px;
-  padding: 6px 10px;
-  border-radius: 5px;
+  bottom: 15px; /* Changed from top to bottom */
+  right: 15px;   /* Keep it near the right edge */
+  transform: none; /* Remove vertical centering */
+  padding: 4px 8px; /* Reduced padding for smaller size */
+  font-size: 0.85rem; /* Slightly smaller text */
+  border-radius: 6px;
   border: none;
   background: white;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.login-header select:hover {
-  background: #f0f0f0;
+
+.tk-language-selector:hover {
+  background: #f5f5f5;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Login Form */
-.login-form {
+.tk-language-selector:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(139, 195, 74, 0.5);
+}
+
+/* Form Container */
+.tk-auth-form-container {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Space between inputs, buttons, and footer */
+  gap: 22px;
   align-items: stretch;
 }
 
-.login-form h2 {
+/* Form Title */
+.tk-auth-form-title {
   color: #2e7d32;
-  margin-bottom: 10px;
+  font-size: 1.5em;
+  margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.login-form input {
-  padding: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+/* Input Fields */
+.tk-auth-input {
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
   font-size: 1em;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
   width: 100%;
+  background-color: #f9f9f9;
 }
 
-.login-form input:focus {
+.tk-auth-input:focus {
   border-color: #558b2f;
   box-shadow: 0 0 8px rgba(139, 195, 74, 0.3);
   outline: none;
+  background-color: #ffffff;
 }
 
-.login-form button {
+/* Submit Button */
+.tk-auth-submit {
   background: linear-gradient(to right, #6d4c41, #a1887f);
   color: white;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 10px;
-  font-size: 1em;
+  border-radius: 12px;
+  font-size: 1.05em;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.login-form button:hover {
-  background: #5d4037;
-  transform: scale(1.05);
+.tk-auth-submit:hover {
+  background: linear-gradient(to right, #5d4037, #8d6e63);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* Footer */
-.login-footer {
-  font-size: 0.9em;
-  margin-top: 15px;
+.tk-auth-submit:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tk-auth-submit:disabled {
+  background: #b0bec5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Additional Links Section */
+.tk-auth-links {
+  margin-top: 10px;
+  font-size: 0.95em;
   color: #555;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
 }
 
-.login-footer a {
+.tk-auth-link {
   color: #388e3c;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: all 0.2s ease;
 }
 
-.login-footer a:hover {
+.tk-auth-link:hover {
+  color: #2e7d32;
   text-decoration: underline;
 }
 
-/* Animation */
-@keyframes fadeIn {
+/* Fade In Animation */
+@keyframes tk-fade-in {
   from {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -147,45 +193,62 @@
   }
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .login-form button,
-  .login-footer {
-    font-size: 0.95em;
+  .tk-auth-card {
+    padding: 25px 20px;
   }
-
-  .login-header {
+  
+  .tk-app-title {
     font-size: 1.5em;
+  }
+  
+  .tk-auth-banner {
     padding: 15px;
   }
-
-  .login-header select {
-    top: 10px;
-    right: 10px;
-    font-size: 0.85em;
+  
+  .tk-auth-form-title {
+    font-size: 1.3em;
   }
-
-  .login-form input,
-  .login-form button {
+  
+  .tk-auth-input, 
+  .tk-auth-submit {
+    padding: 12px;
     font-size: 0.95em;
-  }
-
-  .login-footer {
-    font-size: 0.8em;
   }
 }
 
 @media (max-width: 480px) {
-  .login-container {
+  .tk-auth-card {
     padding: 20px 15px;
+    border-radius: 15px;
   }
-
-  .login-header {
+  
+  .tk-app-title {
     font-size: 1.3em;
   }
-
-  .login-form input,
-  .login-form button {
+  
+  .tk-auth-banner {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .tk-language-selector {
+    padding: 6px 10px;
+    font-size: 0.9em;
+  }
+  
+  .tk-auth-input, 
+  .tk-auth-submit {
     padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .tk-auth-form-container {
+    gap: 15px;
+  }
+  
+  .tk-auth-links {
+    font-size: 0.85em;
   }
 }

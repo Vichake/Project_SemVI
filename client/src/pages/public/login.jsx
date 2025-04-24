@@ -15,7 +15,7 @@ const translations = {
     enterPassword: 'Enter Password',
     noAccount: "Don't have an account?",
     signup: 'Signup',
-    agrotech: 'TechKissan'
+    agrotech: 'TechKisan'
   },
   mr: {
     login: 'लॉगिन',
@@ -70,7 +70,6 @@ const Login = () => {
 
       if (response.status === 200) {
         toast.success('Login successful!', { position: 'bottom-center' });
-        // console.log('Login successful:', response.data);
         const { idToken, user } = response.data;
         localStorage.setItem('token', idToken);
         localStorage.setItem('user', JSON.stringify(user));
@@ -92,20 +91,25 @@ const Login = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <div className="login-header">
-          <h1>{translations[lang].agrotech}</h1>
-          <select id="language" onChange={changeLanguage} value={lang}>
+    <div className="tk-auth-background">
+      <div className="tk-auth-card">
+        <div className="tk-auth-banner">
+          <h1 className="tk-app-title">{translations[lang].agrotech}</h1>
+          <select 
+            className="" 
+            onChange={changeLanguage} 
+            value={lang}
+          >
             <option value="en">English</option>
             <option value="mr">मराठी</option>
           </select>
         </div>
 
-        <form className="login-form" onSubmit={handleLogin}>
-          <h2>{translations[lang].login}</h2>
+        <form className="tk-auth-form-container" onSubmit={handleLogin}>
+          <h2 className="tk-auth-form-title">{translations[lang].login}</h2>
 
           <input
+            className="tk-auth-input"
             type="email"
             name="email"
             placeholder={translations[lang].enterEmail}
@@ -114,6 +118,7 @@ const Login = () => {
             required
           />
           <input
+            className="tk-auth-input"
             type="password"
             name="password"
             placeholder={translations[lang].enterPassword}
@@ -121,15 +126,19 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-          <button type="submit" disabled={loading}>
+          <button 
+            className="tk-auth-submit" 
+            type="submit" 
+            disabled={loading}
+          >
             {loading ? "Logging in..." : translations[lang].login}
           </button>
 
-          <div className="login-footer">
-            <p>
-              {translations[lang].noAccount}{' '}
-              <a href="/register">{translations[lang].signup}</a>
-            </p>
+          <div className="tk-auth-links">
+            <span>{translations[lang].noAccount}</span>
+            <a className="tk-auth-link" href="/register">
+              {translations[lang].signup}
+            </a>
           </div>
         </form>
       </div>

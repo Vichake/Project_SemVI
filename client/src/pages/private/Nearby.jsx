@@ -58,7 +58,6 @@ const Nearby = () => {
       fetchData();
     }
   }, [userLocation]);
-
   useEffect(() => {
     if (data.length > 0 && userLocation) {
       const filtered = data
@@ -72,13 +71,13 @@ const Nearby = () => {
           );
           return { ...market, distance };
         })
-        .filter((market) => market.distance <= 100);
-
+        .filter((market) => market.distance <= 100)
+        .sort((a, b) => a.distance - b.distance); // ⭐ Sort by distance (ascending)
+  
       setFilteredData(filtered);
       setLoading(false);
     }
   }, [data, userLocation]);
-
   return (
     <>
       <Header userData={userData} />

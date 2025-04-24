@@ -18,7 +18,7 @@ const translations = {
     enterPhone: 'Enter Phone Number',
     alreadyHaveAccount: 'Already have an account?',
     login: 'Login',
-    farmersPortal: "Farmer's Portal"
+    farmersPortal: "TechKissan"
   },
   mr: {
     signup: 'नोंदणी करा',
