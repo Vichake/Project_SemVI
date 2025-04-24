@@ -3,24 +3,24 @@ import Axios from 'axios'
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/userContext.jsx';
 import { io } from 'socket.io-client';
-import { sellSocket } from '../../socket.js';
+import { connectSellSocket } from '../../socket.js';
 
-const url = 'http://localhost:5000/api'; // Replace with your API URL
-const socket = io('http://localhost:5000/sell');
+const url = 'http://localhost:5000'; // Replace with your API URL
+// const socket = io('http://localhost:5000/sell');
 
 function SellProductModal({ visible, onClose }) {
   const { userData } = useUser();
 
-  useEffect(() => {
-    sellSocket.on('connect', () => {
-      console.log('Connected to /sell:', sellSocket.id);
-    });
+  // useEffect(() => {
+  //   const socket = connectSellSocket();
+  //   socket.on('connect', () => {
+  //     console.log('Connected to /sell:', socket.id);
+  //   });
   
-    return () => {
-      sellSocket.off('connect');
-    };
-  }, []);
-  
+  //   return () => {
+  //     socket.disconnect(); // optional: clean up if needed
+  //   };
+  // }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -51,7 +51,7 @@ function SellProductModal({ visible, onClose }) {
       if (response.ok) {
         toast.success('Product submitted successfully!', { position: 'bottom-center' });
         const resData = await response.json();
-        sellSocket.emit('product-added', resData.product);
+        // sellSocket.emit('product-added', resData.product);
         socket.emit('product-added', response.data.product);
 
         onClose(); // Close the modal only on success
