@@ -5,7 +5,7 @@ import { useUser } from '../../context/userContext.jsx';
 import { io } from 'socket.io-client';
 import { sellSocket } from '../../socket.js';
 
-const url = 'http://localhost:5000/api'; // Replace with your API URL
+const url = 'http://localhost:5000'; // Replace with your API URL
 const socket = io('http://localhost:5000/sell');
 
 function SellProductModal({ visible, onClose }) {
@@ -27,20 +27,24 @@ function SellProductModal({ visible, onClose }) {
   
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-  
+    const idToken = localStorage.getItem('token')
+    console.log('Form data:', data);
+    console.log('User data:', userData._id);
     // Attach user ID
-    if (!userData?._id || !userData?.idToken) {
+    if (!userData?._id || !idToken) {
       toast.error('User not authenticated.', { position: 'bottom-center' });
+      console.error('User not authenticated:', userData);
       return;
     }
 
     data.user = userData._id;
+
   
     try {
       const response = await fetch(`${url}/user/addProduct`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${userData.idToken}`,
+          'Authorization': `Bearer ${idToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)

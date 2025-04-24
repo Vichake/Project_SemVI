@@ -5,7 +5,7 @@ import { useUser } from "../../context/userContext.jsx";
 const ProductCardList = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
-  const url = 'http://localhost:5000/api';
+  const url = 'http://localhost:5000';
   const fetchProducts = async () => {
     const token = localStorage.getItem("token");
 
