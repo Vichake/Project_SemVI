@@ -3,25 +3,31 @@ import './css/MarketCard.css';
 
 const MarketCard = ({ market, distance }) => {
   const { marketName, district, state } = market;
-//   console.log('MarketCard:', market, distance);
-//   onclicking on this card it should redirect to the market details page
+
   const handleClick = () => {
-    // window.location.href = `/nearby-markets/${market._id}`; // Assuming you have a route set up for market details
+    // Commented out for now but would be used in a real implementation
+    // window.location.href = `/nearby-markets/${market._id}`;
   }
+
   return (
-    <div className="card shadow-sm h-100 border-0 market-card " onClick={handleClick}>
-      <div className="card-body">
-        <h5 className="card-title">{marketName}</h5>
-        <p className="card-text">
-          <strong>District:</strong> {district}
-        </p>
-        <p className="card-text">
-          <strong>State:</strong> {state}
-        </p>
+    <div className="market-card" onClick={handleClick}>
+      <div className="market-card__content">
+        <h3 className="market-card__title">{marketName}</h3>
+        <div className="market-card__details">
+          <div className="market-card__info">
+            <span className="market-card__label">District:</span>
+            <span className="market-card__value">{district}</span>
+          </div>
+          <div className="market-card__info">
+            <span className="market-card__label">State:</span>
+            <span className="market-card__value">{state}</span>
+          </div>
+        </div>
         {distance !== undefined && (
-          <p className="card-text text-muted-market">
-            📍 {distance.toFixed(2)} km away
-          </p>
+          <div className="market-card__distance">
+            <span className="market-card__distance-icon"></span>
+            <span className="market-card__distance-value">{distance.toFixed(2)} km away</span>
+          </div>
         )}
       </div>
     </div>

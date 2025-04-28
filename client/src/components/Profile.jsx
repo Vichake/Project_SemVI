@@ -13,7 +13,6 @@ import {
 import './css/Profile.css';
 
 export default function PersonalProfile({ onClose, userData }) {
-
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -21,43 +20,47 @@ export default function PersonalProfile({ onClose, userData }) {
   };
 
   return (
-    <div className="profile-popup-container">
-      <MDBCard className="profile-popup-card custom-shadow">
+    <div className="pp-container">
+      <MDBCard className="pp-card">
         <MDBRow className="g-0">
-          <MDBCol md="4" className="profile-left text-white text-center">
-            <MDBCardImage
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-              alt="Avatar"
-              className="rounded-circle mb-3 profile-avatar"
-              fluid
-            />
-            <MDBTypography tag="h5">{userData?.name || 'User Name'}</MDBTypography>
-            <MDBCardText className="small-text">{userData?.role || 'Full time berojgar'}</MDBCardText>
+          <MDBCol md="4" className="pp-sidebar">
+            <div className="pp-avatar-wrapper">
+              <MDBCardImage
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                alt="Avatar"
+                className="pp-avatar"
+                fluid
+              />
+            </div>
+            <MDBTypography tag="h5" className="pp-username">{userData?.name || 'User Name'}</MDBTypography>
+            <MDBCardText className="pp-user-role">{userData?.role || 'Full time berojgar'}</MDBCardText>
           </MDBCol>
-
+          
           <MDBCol md="8">
-            <MDBCardBody className="p-4">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <MDBTypography tag="h5" className="fw-bold mb-0">Profile</MDBTypography>
-                <button className="custom-close-btn" onClick={onClose}>✖</button>
+            <MDBCardBody className="pp-body">
+              <div className="pp-header">
+                <MDBTypography tag="h5" className="pp-title">Profile</MDBTypography>
+                <button className="pp-close-btn" onClick={onClose} aria-label="Close">
+                  <span aria-hidden="true">✖</span>
+                </button>
               </div>
-
-              <hr />
-
-              <MDBRow className="pt-2">
-                <MDBCol size="12" className="mb-3">
-                  <MDBTypography tag="h6">Email</MDBTypography>
-                  <MDBCardText className="text-muted">{userData?.email || 'info@example.com'}</MDBCardText>
+              
+              <hr className="pp-divider" />
+              
+              <MDBRow className="pp-info-section">
+                <MDBCol size="12" className="pp-info-item">
+                  <MDBTypography tag="h6" className="pp-info-label">Email</MDBTypography>
+                  <MDBCardText className="pp-info-value">{userData?.email || 'info@example.com'}</MDBCardText>
                 </MDBCol>
-                <MDBCol size="12">
-                  <MDBTypography tag="h6">Phone</MDBTypography>
-                  <MDBCardText className="text-muted">{userData?.phone || '123 456 789'}</MDBCardText>
+                <MDBCol size="12" className="pp-info-item">
+                  <MDBTypography tag="h6" className="pp-info-label">Phone</MDBTypography>
+                  <MDBCardText className="pp-info-value">{userData?.phone || '123 456 789'}</MDBCardText>
                 </MDBCol>
               </MDBRow>
-
-              <div className="d-flex justify-content-end mt-4">
-                <MDBBtn color="danger" size="sm" className="logout-btn" onClick={handleLogout}>
-                  <MDBIcon icon="sign-out-alt" className="me-2" />
+              
+              <div className="pp-footer">
+                <MDBBtn color="danger" size="sm" className="pp-logout-btn" onClick={handleLogout}>
+                  <MDBIcon icon="sign-out-alt" className="pp-icon" />
                   Logout
                 </MDBBtn>
               </div>

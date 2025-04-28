@@ -1,26 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Axios from 'axios'
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/userContext.jsx';
 import { io } from 'socket.io-client';
-import { sellSocket } from '../../socket.js';
+import { connectSellSocket } from '../../socket.js';
 
 const url = 'http://localhost:5000'; // Replace with your API URL
-const socket = io('http://localhost:5000/sell');
 
 function SellProductModal({ visible, onClose }) {
   const { userData } = useUser();
 
+  const socketRef = useRef(null);
+
   useEffect(() => {
-    sellSocket.on('connect', () => {
-      console.log('Connected to /sell:', sellSocket.id);
+    if (!visible) return;
+    const socket = connectSellSocket();
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      console.log('Connected to /sell:', socket.id);
     });
   
     return () => {
-      sellSocket.off('connect');
+      socket.off('connect') // optional: clean up if needed
+      socketRef.current = null;
     };
-  }, []);
-  
+  }, [visible]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,6 +33,8 @@ function SellProductModal({ visible, onClose }) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     const idToken = localStorage.getItem('token')
+    console.log(idToken);
+    
     console.log('Form data:', data);
     console.log('User data:', userData._id);
     // Attach user ID
@@ -55,8 +62,8 @@ function SellProductModal({ visible, onClose }) {
       if (response.ok) {
         toast.success('Product submitted successfully!', { position: 'bottom-center' });
         const resData = await response.json();
-        sellSocket.emit('product-added', resData.product);
-        socket.emit('product-added', response.data.product);
+        // sellSocket.emit('product-added', resData.product);
+        socketRef.current?.emit('product-added', resData.product);
 
         onClose(); // Close the modal only on success
       } else {

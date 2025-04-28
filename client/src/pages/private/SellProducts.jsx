@@ -9,6 +9,7 @@ import MarketSelector from '../../components/SellProducts/MarketSelector.jsx';
 import ProductCategories from '../../components/SellProducts/ProductCategories.jsx';
 import SellProductModal from '../../components/SellProducts/SellProductModel.jsx';
 import Products from '../../components/SellProducts/Products.jsx'
+import AllProducts from '../../components/SellProducts/AllProducts.jsx';
 // import Footer from './components/Footer';
 
 function FarmMarketHub() {
@@ -40,6 +41,7 @@ function FarmMarketHub() {
 
       <SellProductModal visible={modalVisible} onClose={toggleModal} />
       <Products />
+      <AllProducts />
       {/* <Footer /> */}
     </>
   );

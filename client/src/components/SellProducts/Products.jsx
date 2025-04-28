@@ -1,74 +1,91 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { connectSellSocket } from "../../socket.js"; // <-- Add this
 import { useUser } from "../../context/userContext.jsx";
 
 const ProductCardList = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
   const url = 'http://localhost:5000';
+  // 🔁 Fetch products initially
   const fetchProducts = async () => {
     const token = localStorage.getItem("token");
-
     if (!token) {
       setError("No auth token found. Please log in.");
       return;
     }
 
     try {
-        const response = await fetch(`${url}/user/getUsersProducts`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Failed to fetch products");
-        }
-      
-        const data = await response.json();
-        setProducts(data.data);
-      } catch (err) {
-        console.error(err);
-        setError(err.message || "Failed to fetch products");
-      }
-      
-  };
+      const response = await fetch(`${url}/user/getUsersProducts`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  const handleDelete = async (productId) => {
-    // You can implement actual delete logic here using axios.delete
-    const token = localStorage.getItem("token");
-    if (!token) {
-        setError("No auth token found. Please log in.");
-        return;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch products");
+      }
+
+      const data = await response.json();
+      setProducts(data.data);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Failed to fetch products");
     }
-
-    try {
-        const response = await fetch(`${url}/user/deleteProducts`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ productId })
-        });
-        // Remove the deleted product from the state
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== productId)
-        );
-  
-        alert("Product deleted successfully!");
-      } catch (err) {
-        console.error(err);
-        setError(err.response?.data?.message || "Failed to delete product");
-      }
-    console.log("Delete clicked for:", productId);
   };
 
+  // ❌ Don't put this inside fetchProducts
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  // ✅ Real-time socket listener
+  useEffect(() => {
+    const socket = connectSellSocket();
+  
+    socket.on("productAdded", (newProduct) => {
+      console.log("📦 New product received via socket:", newProduct);
+      setProducts((prev) => {
+        const exists = prev.some((p) => p._id === newProduct._id);
+        return exists ? prev : [newProduct, ...prev];
+      });
+    });
+  
+    return () => {
+      socket.off("productAdded");
+      // socket.disconnect();
+    };
+  }, []);
+  
+
+  const handleDelete = async (productId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("No auth token found. Please log in.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${url}/user/deleteProducts`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId }),
+      });
+
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== productId)
+      );
+
+      alert("Product deleted successfully!");
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Failed to delete product");
+    }
+  };
 
   return (
     <div className="pcl-container">
