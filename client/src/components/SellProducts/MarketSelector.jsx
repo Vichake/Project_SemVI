@@ -111,7 +111,7 @@ function MarketSelector({ activeMarket, onMarketChange }) {
 
       <div className="market-prices">
         {filteredProducts.length === 0 ? (
-          <p className="no-products">No products found</p>
+          <p className="no-products"></p>
         ) : (
           filteredProducts.map((product) => (
             <div className="card" key={product}>

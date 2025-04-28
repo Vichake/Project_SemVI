@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { connectSellSocket } from "../../socket.js"; // <-- Add this
+import { connectSellSocket,disconnectSellSocket } from "../../socket.js"; // <-- Add this
 import { useUser } from "../../context/userContext.jsx";
 
 const ProductCardList = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
   const url = 'http://localhost:5000';
-
   // 🔁 Fetch products initially
   const fetchProducts = async () => {
     const token = localStorage.getItem("token");
@@ -55,7 +54,8 @@ const ProductCardList = () => {
   
     return () => {
       socket.off("productAdded");
-      socket.disconnect();
+      disconnectSellSocket();
+      // socket.disconnect();
     };
   }, []);
   

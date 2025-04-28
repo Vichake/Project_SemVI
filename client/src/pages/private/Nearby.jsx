@@ -12,7 +12,7 @@ const Nearby = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
-  const [selectedMarket, setSelectedMarket] = useState(null); // ⭐ View state
+  const [selectedMarket, setSelectedMarket] = useState(null);
   const { userData } = useUser();
 
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
@@ -72,8 +72,9 @@ const Nearby = () => {
           );
           return { ...market, distance };
         })
-        .filter((market) => market.distance <= 100);
-
+        .filter((market) => market.distance <= 100)
+        .sort((a, b) => a.distance - b.distance);
+  
       setFilteredData(filtered);
       setLoading(false);
     }
@@ -82,45 +83,67 @@ const Nearby = () => {
   return (
     <>
       <Header userData={userData} />
-      <div className="nearby-page">
-        <div className="nearby-market-container container">
+      <div className="nearby-view">
+        <div className="nearby-view__container">
+          <div className="nearby-view__header">
+            <h1 className="nearby-view__main-title">
+              Nearby Markets
+            </h1>
+            <p className="nearby-view__subtitle">
+              Discover fresh produce and agricultural products at markets near you
+            </p>
+            <div className="nearby-view__header-badge">
+              <span className="nearby-view__location-icon"></span>
+              {userLocation && (
+                <span className="nearby-view__current-location">
+                  Showing markets within 100 km of your location
+                </span>
+              )}
+            </div>
+          </div>
+
           {loading ? (
-            <div className="market-loading-container">
-              <div className="market-spinner"></div>
-              <div className="market-loading-text">Loading nearby markets...</div>
+            <div className="nearby-view__loading">
+              <div className="nearby-view__loader">
+                <div className="nearby-view__loader-circle"></div>
+                <div className="nearby-view__loader-circle"></div>
+                <div className="nearby-view__loader-circle"></div>
+              </div>
+              <div className="nearby-view__loading-text">Finding markets near you...</div>
             </div>
           ) : error ? (
-            <div className="market-error-message">Error: {error}</div>
+            <div className="nearby-view__error">Error: {error}</div>
           ) : selectedMarket ? (
-            // ⭐ Single Market View
-            <div className="market-detail-view">
+            // Single Market View
+            <div className="nearby-view__detail">
               <button
-                className="back-button"
+                className="nearby-view__back-btn"
                 onClick={() => setSelectedMarket(null)}
               >
                 ← Back to Markets
               </button>
-              <h2>{selectedMarket.name}</h2>
-              <p><strong>Description:</strong> {selectedMarket.description}</p>
-              <p><strong>Address:</strong> {selectedMarket.address}</p>
-              <p><strong>Distance:</strong> {selectedMarket.distance?.toFixed(2)} km</p>
-              {/* Add more info here if available */}
+              <h2 className="nearby-view__market-title">{selectedMarket.name}</h2>
+              <div className="nearby-view__market-info">
+                <p className="nearby-view__market-description"><strong>Description:</strong> {selectedMarket.description}</p>
+                <p className="nearby-view__market-address"><strong>Address:</strong> {selectedMarket.address}</p>
+                <p className="nearby-view__market-distance"><strong>Distance:</strong> {selectedMarket.distance?.toFixed(2)} km</p>
+                {/* Add more info here if available */}
+              </div>
             </div>
           ) : (
-            // ⭐ Grid View
+            // Grid View
             <>
               {filteredData.length === 0 ? (
-                <p className="market-no-results">
+                <p className="nearby-view__no-results">
                   No markets found within 100km radius.
                 </p>
               ) : (
-                <div className="market-card-row">
+                <div className="nearby-view__grid">
                   {filteredData.map((market) => (
                     <div
-                      className="market-col"
+                      className="nearby-view__grid-item"
                       key={market._id}
-                      onClick={() => setSelectedMarket(market)} // Set the selected market
-                      style={{ cursor: 'pointer' }}
+                      onClick={() => setSelectedMarket(market)}
                     >
                       <MarketCard market={market} distance={market.distance} />
                     </div>
@@ -135,4 +158,4 @@ const Nearby = () => {
   );
 };
 
-export default Nearby;
+export default Nearby;0

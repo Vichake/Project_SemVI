@@ -1,128 +1,192 @@
-.profile-popup-container {
+/* ProfileCard.css */
+.pp-container {
   position: fixed;
-  top: 20px; /* Adjust the top margin */
-  right: 20px; /* Adjust the right margin */
-  z-index: 1000; /* Ensure it appears above other content */
-  max-width: 100%; /* Ensure the container is responsive */
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 100%;
   padding: 10px;
-  opacity: 0; /* Initially invisible */
-  transform: scale(0.5); /* Initially smaller */
-  animation: pop-up-animation 0.5s forwards; /* Apply the animation */
+  opacity: 0;
+  transform: scale(0.5);
+  animation: pp-popup-animation 0.5s forwards;
 }
 
-@keyframes pop-up-animation {
+@keyframes pp-popup-animation {
   0% {
     opacity: 0;
-    transform: scale(0.5); /* Start small and invisible */
+    transform: scale(0.5);
   }
   100% {
     opacity: 1;
-    transform: scale(0.8); /* End at a slightly smaller size */
+    transform: scale(0.8);
   }
 }
 
-.profile-popup-card {
-  border: none; /* Remove default card border */
-  background: linear-gradient(135deg, #3e8e41, #a3d8a5); /* Earthy green gradient background */
-  color: white; /* Text color */
-  border-radius: 8px; /* Slightly larger border radius for a smoother look */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* A subtle shadow effect */
-  width: 320px; /* Reduced width */
+.pp-card {
+  border: none;
+  background: linear-gradient(135deg, #3e8e41, #a3d8a5);
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 320px;
   overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
-.profile-left {
-  background-color: rgba(0, 0, 0, 0.4); /* Darker semi-transparent background */
-  padding: 1.5rem; /* Reduced padding for a more compact look */
+.pp-card:hover {
+  transform: translateY(-5px);
+}
+
+.pp-sidebar {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.profile-avatar {
-  width: 90px; /* Smaller fixed width for the avatar */
-  height: 90px; /* Smaller fixed height for the avatar */
-  border: 4px solid white; /* White border around the avatar */
-  margin-bottom: 1rem; /* Margin below the avatar */
-  transition: transform 0.3s ease; /* Avatar hover effect */
+.pp-avatar-wrapper {
+  margin-bottom: 1rem;
+  position: relative;
 }
 
-.profile-left .profile-avatar {
-  border-radius: 50%; /* Ensure the avatar is perfectly circular */
+.pp-avatar {
+  width: 90px;
+  height: 90px;
+  border: 4px solid white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  object-fit: cover;
 }
 
-.profile-left .profile-avatar:hover {
-  transform: scale(1.1); /* Slightly scale up the avatar on hover */
+.pp-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
 }
 
-.custom-close-btn {
-  background: transparent;
-  border: none;
-  color: white; /* Close button color */
-  font-size: 1.5rem; /* Slightly larger size for better visibility */
-  cursor: pointer;
-  transition: color 0.2s ease;
+.pp-username {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
 }
 
-.custom-close-btn:hover {
-  color: rgba(255, 255, 255, 0.8); /* Slightly change color on hover */
+.pp-user-role {
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
-hr {
-  border: 1px solid rgba(255, 255, 255, 0.6); /* Use a light border for the separator */
-  margin: 1.5rem 0; /* Adjust margin for better spacing */
+.pp-body {
+  padding: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.profile-popup-card .p-4 {
-  padding: 1.5rem; /* Reduced padding inside the profile card for more compact spacing */
-}
-
-.profile-popup-card .d-flex {
+.pp-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.social-icons a {
-  text-decoration: none;
+.pp-title {
+  font-weight: 600;
+  margin-bottom: 0;
   color: white;
-  margin: 0 8px; /* Adjusted spacing for icons */
-  transition: color 0.3s ease;
 }
 
-.social-icons a:hover {
-  color: #a3d8a5; /* Highlight the icon color on hover */
+.pp-close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 
-.logout-btn {
-  background-color: #d32f2f; /* Red color for logout button */
-  color: white; /* White text color */
-  font-size: 0.9rem;
-  padding: 6px 12px; /* Smaller padding */
+.pp-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+.pp-divider {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  margin: 1rem 0;
+}
+
+.pp-info-section {
+  padding: 0.5rem 0;
+}
+
+.pp-info-item {
+  margin-bottom: 1rem;
+}
+
+.pp-info-label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pp-info-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.pp-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.pp-logout-btn {
+  background-color: #d32f2f;
+  color: white;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
-  transition: background-color 0.3s ease; /* Smooth background transition */
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
 }
 
-.logout-btn:hover {
-  background-color: #b71c1c; /* Darker red on hover */
+.pp-logout-btn:hover {
+  background-color: #b71c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.pp-icon {
+  margin-right: 0.5rem;
+}
+
+/* Responsiveness */
 @media (max-width: 768px) {
-  .profile-popup-card {
-    width: 80%; /* Reduced width for smaller screens */
-    margin: 10px 0; /* Add some margin to avoid touching the edges */
+  .pp-container {
+    right: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: center;
   }
-
-  .profile-avatar {
-    width: 80px; /* Reduced avatar size */
-    height: 80px; /* Reduced avatar size */
+  
+  .pp-card {
+    width: 90%;
+    max-width: 320px;
   }
-
-  .profile-left {
-    padding: 1.2rem; /* Reduced padding */
+  
+  .pp-avatar {
+    width: 80px;
+    height: 80px;
   }
-
-  .profile-popup-card .p-4 {
-    padding: 1.2rem; /* Adjusted padding */
+  
+  .pp-sidebar {
+    padding: 1.2rem;
+  }
+  
+  .pp-body {
+    padding: 1.2rem;
   }
 }

@@ -1,11 +1,19 @@
-// FeaturedSchemes Component
-const FeaturedSchemes = () => {
+// src/pages/AgriSchemes/components/FeaturedSchemesSection.jsx
+import React, { useState } from 'react';
+import SchemeCard from './SchemeCard';
+import { schemesData } from './data';
+
+const FeaturedSchemesSection = () => {
   const [activeTab, setActiveTab] = useState('national');
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   return (
     <section className="as-featured-schemes">
       <div className="as-container">
-        <div className="as-section-header as-fade-in">
+        <div className="as-section-header">
           <div className="as-badge">Explore Available Schemes</div>
           <h2 className="as-section-title">Featured Government Initiatives</h2>
           <p className="as-section-description">
@@ -17,47 +25,41 @@ const FeaturedSchemes = () => {
           <div className="as-tabs-list">
             <button 
               className={`as-tab ${activeTab === 'national' ? 'as-active' : ''}`} 
-              onClick={() => setActiveTab('national')}
+              onClick={() => handleTabChange('national')}
             >
               National
             </button>
             <button 
               className={`as-tab ${activeTab === 'state' ? 'as-active' : ''}`} 
-              onClick={() => setActiveTab('state')}
+              onClick={() => handleTabChange('state')}
             >
               State-level
             </button>
             <button 
               className={`as-tab ${activeTab === 'specialized' ? 'as-active' : ''}`} 
-              onClick={() => setActiveTab('specialized')}
+              onClick={() => handleTabChange('specialized')}
             >
               Specialized
             </button>
           </div>
 
           <div className="as-schemes-content">
-            <div className={`as-schemes-grid ${activeTab === 'national' ? 'as-active' : ''}`}>
-              {schemes.national.map(scheme => (
-                <SchemeCard key={scheme.id} scheme={scheme} />
-              ))}
-            </div>
-            
-            <div className={`as-schemes-grid ${activeTab === 'state' ? 'as-active' : ''}`}>
-              {schemes.state.map(scheme => (
-                <SchemeCard key={scheme.id} scheme={scheme} />
-              ))}
-            </div>
-            
-            <div className={`as-schemes-grid ${activeTab === 'specialized' ? 'as-active' : ''}`}>
-              {schemes.specialized.map(scheme => (
-                <SchemeCard key={scheme.id} scheme={scheme} />
-              ))}
-            </div>
+            {Object.keys(schemesData).map((schemeType) => (
+              <div 
+                key={schemeType}
+                className={`as-schemes-grid ${activeTab === schemeType ? 'as-active' : ''}`} 
+                id={`${schemeType}-schemes`}
+              >
+                {schemesData[schemeType].map((scheme, index) => (
+                  <SchemeCard key={index} scheme={scheme} />
+                ))}
+              </div>
+            ))}
 
             <div className="as-schemes-footer">
               <a href="/schemes" className="as-btn as-btn-outline as-btn-lg">
                 View All <span className="as-current-scheme-type">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</span> Schemes
-                <FeatherIcon name="arrow-right" />
+                <i data-feather="arrow-right"></i>
               </a>
             </div>
           </div>
@@ -66,3 +68,5 @@ const FeaturedSchemes = () => {
     </section>
   );
 };
+
+export default FeaturedSchemesSection;

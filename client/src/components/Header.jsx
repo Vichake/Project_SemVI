@@ -24,7 +24,7 @@ const Header = ({userData}) => {
       <div className="container">
         <div className="navbar-content">
           <Link to="/" className="navbar-logo">
-            <span className="text-primary">Tech</span>Kissan
+            <span className="text-primary">Tech</span>Kisan
           </Link>
 
           {/* Desktop Navigation */}
