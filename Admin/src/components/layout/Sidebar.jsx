@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  Home, Users, BookOpen, BarChart2, 
-  Settings, LogOut, Menu, X,
-  Tractor, Map, FileText
-} from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
+import {
+  FaHome, FaUsers, FaBookOpen, FaChartBar,
+  FaCog, FaSignOutAlt, FaTractor, FaMapMarkedAlt, FaFileAlt, FaBars, FaTimes
+} from 'react-icons/fa';
 
 const Sidebar = () => {
   const { logout } = useAuth();
@@ -15,14 +14,14 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const navItems = [
-    { title: 'Dashboard', icon: <Home size={20} />, path: '/dashboard' },
-    { title: 'Farmers', icon: <Users size={20} />, path: '/farmers' },
-    { title: 'Schemes', icon: <FileText size={20} />, path: '/schemes' },
-    { title: 'Instruments', icon: <Tractor size={20} />, path: '/instruments' },
-    { title: 'Locations', icon: <Map size={20} />, path: '/locations' },
-    { title: 'Content', icon: <BookOpen size={20} />, path: '/content' },
-    { title: 'Analytics', icon: <BarChart2 size={20} />, path: '/analytics' },
-    { title: 'Settings', icon: <Settings size={20} />, path: '/settings' },
+    { title: 'Dashboard', icon: <FaHome size={18} />, path: '/dashboard' },
+    { title: 'Farmers', icon: <FaUsers size={18} />, path: '/farmers' },
+    { title: 'Schemes', icon: <FaFileAlt size={18} />, path: '/schemes' },
+    { title: 'Instruments', icon: <FaTractor size={18} />, path: '/instruments' },
+    { title: 'Locations', icon: <FaMapMarkedAlt size={18} />, path: '/locations' },
+    { title: 'Content', icon: <FaBookOpen size={18} />, path: '/content' },
+    { title: 'Analytics', icon: <FaChartBar size={18} />, path: '/analytics' },
+    { title: 'Settings', icon: <FaCog size={18} />, path: '/settings' },
   ];
 
   return (
@@ -33,7 +32,7 @@ const Sidebar = () => {
           onClick={toggleSidebar} 
           className="p-2 rounded-full bg-green-600 text-white shadow-lg"
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
         </button>
       </div>
 
@@ -53,7 +52,7 @@ const Sidebar = () => {
           {/* Logo */}
           <div className="p-4 border-b flex items-center justify-center">
             <div className="flex items-center space-x-2">
-              <Tractor className="text-green-600" size={24} />
+              <FaTractor className="text-green-600" size={22} />
               <h1 className="text-xl font-bold text-green-800">AgriAdmin</h1>
             </div>
           </div>
@@ -85,7 +84,7 @@ const Sidebar = () => {
               onClick={logout}
               className="flex items-center px-4 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50 w-full"
             >
-              <LogOut size={20} className="mr-3" />
+              <FaSignOutAlt size={18} className="mr-3" />
               <span>Logout</span>
             </button>
           </div>
