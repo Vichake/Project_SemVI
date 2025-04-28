@@ -1,54 +1,4 @@
-import React, { useState } from 'react';
-import { Search, Filter, Plus, MapPin, Edit, Trash2, Eye } from 'lucide-react';
-
-// Mock data for farmers
-const MOCK_FARMERS = [
-  {
-    id: 1,
-    name: 'Rajesh Kumar',
-    location: 'Punjab',
-    schemes: ['PM-KISAN', 'Soil Health Card'],
-    land: '5.2 acres',
-    crops: ['Wheat', 'Rice'],
-    phone: '+91 9876543210',
-  },
-  {
-    id: 2,
-    name: 'Anita Desai',
-    location: 'Maharashtra',
-    schemes: ['Pradhan Mantri Fasal Bima Yojana'],
-    land: '3.7 acres',
-    crops: ['Cotton', 'Sugarcane'],
-    phone: '+91 9876543211',
-  },
-  {
-    id: 3,
-    name: 'Suresh Patel',
-    location: 'Gujarat',
-    schemes: ['Kisan Credit Card', 'PM-KISAN'],
-    land: '4.5 acres',
-    crops: ['Groundnut', 'Cotton'],
-    phone: '+91 9876543212',
-  },
-  {
-    id: 4,
-    name: 'Lakshmi Reddy',
-    location: 'Telangana',
-    schemes: ['Rythu Bandhu', 'PM-KISAN'],
-    land: '6.8 acres',
-    crops: ['Rice', 'Turmeric'],
-    phone: '+91 9876543213',
-  },
-  {
-    id: 5,
-    name: 'Mohan Singh',
-    location: 'Haryana',
-    schemes: ['Soil Health Card'],
-    land: '8.2 acres',
-    crops: ['Wheat', 'Mustard'],
-    phone: '+91 9876543214',
-  },
-];
+import React, { useState, useEffect } from 'react';
 
 const FarmerModal = ({ isOpen, onClose, farmer = null, onSave }) => {
   const [formData, setFormData] = useState(
@@ -61,6 +11,21 @@ const FarmerModal = ({ isOpen, onClose, farmer = null, onSave }) => {
       phone: '',
     }
   );
+
+  useEffect(() => {
+    if (farmer) {
+      setFormData(farmer);
+    } else {
+      setFormData({
+        name: '',
+        location: '',
+        schemes: [],
+        land: '',
+        crops: [],
+        phone: '',
+      });
+    }
+  }, [farmer]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,7 +82,7 @@ const FarmerModal = ({ isOpen, onClose, farmer = null, onSave }) => {
                   className="absolute right-2 top-2 text-green-600"
                   title="Get current location"
                 >
-                  <MapPin size={18} />
+                  📍
                 </button>
               </div>
             </div>
@@ -205,10 +170,41 @@ const FarmerModal = ({ isOpen, onClose, farmer = null, onSave }) => {
 };
 
 const FarmersPage = () => {
-  const [farmers, setFarmers] = useState(MOCK_FARMERS);
+  const [farmers, setFarmers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentFarmer, setCurrentFarmer] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const API_URL = 'http://localhost:5000';
+
+  // Fetch farmers data
+  const fetchFarmers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_URL}/admin/farmers`);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setFarmers(data);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to fetch farmers:", err);
+      setError(err.message);
+      setFarmers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load farmers on initial render
+  useEffect(() => {
+    fetchFarmers();
+  }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -230,25 +226,63 @@ const FarmersPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveFarmer = (farmerData) => {
-    if (currentFarmer) {
-      // Edit existing farmer
-      setFarmers(
-        farmers.map((f) => (f.id === currentFarmer.id ? { ...farmerData, id: f.id } : f))
-      );
-    } else {
-      // Add new farmer
-      const newFarmer = {
-        ...farmerData,
-        id: Math.max(0, ...farmers.map((f) => f.id)) + 1,
-      };
-      setFarmers([...farmers, newFarmer]);
+  const handleSaveFarmer = async (farmerData) => {
+    try {
+      if (currentFarmer) {
+        // Edit existing farmer
+        const response = await fetch(`${API_URL}/admin/farmers/${currentFarmer.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(farmerData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error updating farmer: ${response.status}`);
+        }
+
+        const updatedFarmer = await response.json();
+        setFarmers(farmers.map(f => f.id === currentFarmer.id ? updatedFarmer : f));
+      } else {
+        // Add new farmer
+        const response = await fetch(`${API_URL}/admin/farmers`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(farmerData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error adding farmer: ${response.status}`);
+        }
+
+        const newFarmer = await response.json();
+        setFarmers([...farmers, newFarmer]);
+      }
+    } catch (err) {
+      console.error("Failed to save farmer:", err);
+      alert(`Failed to save farmer: ${err.message}`);
     }
   };
 
-  const handleDeleteFarmer = (id) => {
+  const handleDeleteFarmer = async (id) => {
     if (window.confirm('Are you sure you want to delete this farmer?')) {
-      setFarmers(farmers.filter((f) => f.id !== id));
+      try {
+        const response = await fetch(`${API_URL}/admin/farmers/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error deleting farmer: ${response.status}`);
+        }
+
+        setFarmers(farmers.filter(f => f.id !== id));
+      } catch (err) {
+        console.error("Failed to delete farmer:", err);
+        alert(`Failed to delete farmer: ${err.message}`);
+      }
     }
   };
 
@@ -264,7 +298,7 @@ const FarmersPage = () => {
             onClick={handleAddFarmer}
             className="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            <Plus size={16} className="mr-2" />
+            <span className="mr-2">+</span>
             Add Farmer
           </button>
         </div>
@@ -275,7 +309,7 @@ const FarmersPage = () => {
         <div className="flex flex-col md:flex-row gap-4">
           <div className="relative flex-grow">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search size={18} className="text-gray-400" />
+              <span className="text-gray-400">🔍</span>
             </div>
             <input
               type="search"
@@ -287,123 +321,140 @@ const FarmersPage = () => {
           </div>
           <div>
             <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-              <Filter size={16} className="mr-2 text-gray-500" />
+              <span className="mr-2 text-gray-500">⚙️</span>
               Filter
             </button>
           </div>
         </div>
       </div>
 
-      {/* Farmers table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Farmer
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Location
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Schemes
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Land
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredFarmers.map((farmer) => (
-                <tr key={farmer.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span className="text-lg font-medium text-green-800">
-                          {farmer.name.charAt(0)}
-                        </span>
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{farmer.name}</div>
-                        <div className="text-sm text-gray-500">{farmer.phone}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <MapPin size={16} className="text-green-600 mr-1" />
-                      <span className="text-sm text-gray-900">{farmer.location}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex flex-wrap gap-1">
-                      {farmer.schemes.map((scheme, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800"
-                        >
-                          {scheme}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {farmer.land}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center space-x-3">
-                      <button 
-                        className="text-indigo-600 hover:text-indigo-900"
-                        title="View details"
-                      >
-                        <Eye size={18} />
-                      </button>
-                      <button 
-                        className="text-green-600 hover:text-green-900"
-                        onClick={() => handleEditFarmer(farmer)}
-                        title="Edit"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button 
-                        className="text-red-600 hover:text-red-900"
-                        onClick={() => handleDeleteFarmer(farmer.id)}
-                        title="Delete"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+        </div>
+      ) : error ? (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
+          <strong className="font-bold">Error:</strong>
+          <span className="block sm:inline"> {error}</span>
+          <button 
+            onClick={fetchFarmers} 
+            className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        /* Farmers table */
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Farmer
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Location
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Schemes
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Land
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {filteredFarmers.map((farmer) => (
+                  <tr key={farmer.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                          <span className="text-lg font-medium text-green-800">
+                            {farmer.name.charAt(0)}
+                          </span>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{farmer.name}</div>
+                          <div className="text-sm text-gray-500">{farmer.phone}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <span className="text-green-600 mr-1">📍</span>
+                        <span className="text-sm text-gray-900">{farmer.location}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex flex-wrap gap-1">
+                        {farmer.schemes && farmer.schemes.map((scheme, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800"
+                          >
+                            {scheme}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {farmer.land}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center space-x-3">
+                        <button 
+                          className="text-indigo-600 hover:text-indigo-900"
+                          title="View details"
+                        >
+                          👁️
+                        </button>
+                        <button 
+                          className="text-green-600 hover:text-green-900"
+                          onClick={() => handleEditFarmer(farmer)}
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
+                        <button 
+                          className="text-red-600 hover:text-red-900"
+                          onClick={() => handleDeleteFarmer(farmer.id)}
+                          title="Delete"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        {filteredFarmers.length === 0 && (
-          <div className="py-8 text-center text-gray-500">
-            No farmers found. Add a new farmer or adjust your search.
-          </div>
-        )}
+          {filteredFarmers.length === 0 && (
+            <div className="py-8 text-center text-gray-500">
+              No farmers found. Add a new farmer or adjust your search.
+            </div>
+          )}
 
-        <div className="px-6 py-3 flex items-center justify-between border-t">
-          <div className="text-sm text-gray-500">
-            Showing {filteredFarmers.length} of {farmers.length} farmers
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 border rounded-md text-sm disabled:opacity-50">
-              Previous
-            </button>
-            <button className="px-3 py-1 border rounded-md text-sm">
-              Next
-            </button>
+          <div className="px-6 py-3 flex items-center justify-between border-t">
+            <div className="text-sm text-gray-500">
+              Showing {filteredFarmers.length} of {farmers.length} farmers
+            </div>
+            <div className="flex items-center space-x-2">
+              <button className="px-3 py-1 border rounded-md text-sm disabled:opacity-50">
+                Previous
+              </button>
+              <button className="px-3 py-1 border rounded-md text-sm">
+                Next
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Farmer modal */}
       <FarmerModal
