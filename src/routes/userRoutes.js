@@ -8,6 +8,7 @@ import { getProducts } from '../controllers/getProducts.js';
 import { deleteProducts } from '../controllers/deleteProducts.js';
 
 
+
 const router = express.Router();
 router
 .get('/getMarketData', getMarketData)
@@ -15,5 +16,6 @@ router
 .get("/getUsersProducts",verifyFirebaseToken,getUsersProducts)
 .get("/getProducts",getProducts)
 .post("/deleteProducts",verifyFirebaseToken,deleteProducts)
+.get("/getInstruments",getInstruments)
 
 export default router;

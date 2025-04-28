@@ -6,10 +6,10 @@ import {getUser} from '../controllers/getUser.js'
 
 const router = express.Router();
 
-router.post('/signup', signUp);
-router.post('/login', login);
-
-router.get('/getUser',getUser)
+router
+.post('/signup', signUp)
+.post('/login', login)
+.get('/getUser',getUser)
 
 
 
