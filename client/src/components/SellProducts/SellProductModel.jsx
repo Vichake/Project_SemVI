@@ -22,7 +22,7 @@ function SellProductModal({ visible, onClose }) {
     });
   
     return () => {
-      socket.disconnect(); // optional: clean up if needed
+      socket.off('connect'); 
       socketRef.current = null;
     };
   }, [visible]);

@@ -55,6 +55,7 @@ const ProductCardList = () => {
   
     return () => {
       socket.off("productAdded");
+      socket.disconnect();
     };
   }, []);
   
