@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js"; // Now this will work 
 import userRoutes from "./src/routes/userRoutes.js"; // Now this will work
+import adminRoutes from "./src/routes/adminRoutes.js"; // Now this will work
 
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(cors());
 // Routes
 app.use("/api", authRoutes);
 app.use("/user", userRoutes); 
+app.use("/admin", adminRoutes);
 // app.get('/', (req,res)=>{
 //     res.send('API is running...')
 // })
