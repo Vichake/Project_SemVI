@@ -24,5 +24,10 @@ const instrumentSchema = new mongoose.Schema({
         type:Date,
         required:true
     }
+}, {
+    timestamps: true
+  });
 
-}); 
+const Instrument = mongoose.model('Instrument', instrumentSchema);
+
+export {Instrument};

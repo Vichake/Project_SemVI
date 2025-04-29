@@ -1,11 +1,12 @@
 import express from 'express';
 
 import {getMarketData} from '../controllers/getMarketData.js';
-import {addProduct} from '../controllers/addProduct.js';
+import {addProduct} from '../controllers/productControllers/addProduct.js';
 import { verifyFirebaseToken } from '../controllers/verifyFirebaseToken.js';
-import { getUsersProducts } from '../controllers/getUsersProducts.js';
-import { getProducts } from '../controllers/getProducts.js';
-import { deleteProducts } from '../controllers/deleteProducts.js';
+import { getUsersProducts } from '../controllers/productControllers/getUsersProducts.js';
+import { getProducts } from '../controllers/productControllers/getProducts.js';
+import { deleteProducts } from '../controllers/productControllers/deleteProducts.js';
+import { getInstruments } from '../controllers/instrumentsControllers/getInstruments.js';
 
 
 

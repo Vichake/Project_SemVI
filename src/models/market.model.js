@@ -8,6 +8,8 @@ const marketSchema = new mongoose.Schema({
     type: { type: String, enum: ["Point"], default: "Point" },
     coordinates: [Number] // [longitude, latitude]
   }
+},{
+  timestamps:true
 });
 
 const Market = mongoose.model("Market", marketSchema);

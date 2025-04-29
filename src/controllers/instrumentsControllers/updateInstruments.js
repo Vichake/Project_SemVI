@@ -1,4 +1,4 @@
-import Instrument from "../../models/instrumentModel.js";
+import {Instrument} from "../../models/instruments.js";
 
 export const updateInstruments = async (req, res) => {
   try {

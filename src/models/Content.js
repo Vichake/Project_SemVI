@@ -39,6 +39,8 @@ const contentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now, // Date when the content is added
   },
+},{
+  timestamps:true
 });
 
 const Content = mongoose.model('Content', contentSchema);
