@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-// SVG icons as components to replace Lucide React
+// SVG icons as components
 const SearchIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400">
     <circle cx="11" cy="11" r="8"></circle>
@@ -65,64 +65,104 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
-// Mock data for schemes
-const MOCK_SCHEMES = [
-  {
-    id: 1,
-    name: 'Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)',
-    description: 'Income support of ₹6,000 per year to all farmer families across the country in three equal installments of ₹2,000.',
-    eligibility: 'All land-holding farmers with certain exclusions',
-    startDate: '2019-02-01',
-    endDate: null,
-    status: 'active',
-    beneficiaries: 1253
-  },
-  {
-    id: 2,
-    name: 'Pradhan Mantri Fasal Bima Yojana (PMFBY)',
-    description: 'Insurance coverage and financial support to farmers in the event of crop failure due to natural calamities, pests & diseases.',
-    eligibility: 'All farmers growing notified crops',
-    startDate: '2016-04-01',
-    endDate: null,
-    status: 'active',
-    beneficiaries: 842
-  },
-  {
-    id: 3,
-    name: 'Soil Health Card Scheme',
-    description: 'Provides information to farmers on nutrient status of their soil along with recommendations on appropriate dosage of nutrients.',
-    eligibility: 'All farmers',
-    startDate: '2015-02-19',
-    endDate: null,
-    status: 'active',
-    beneficiaries: 965
-  },
-  {
-    id: 4,
-    name: 'Kisan Credit Card (KCC)',
-    description: 'Provides farmers with timely access to credit. Farmers can use KCC to purchase agriculture inputs and draw cash for their needs.',
-    eligibility: 'All farmers, sharecroppers, tenant farmers',
-    startDate: '1998-08-25',
-    endDate: null,
-    status: 'active',
-    beneficiaries: 1088
-  },
-  {
-    id: 5,
-    name: 'Agricultural Technology Management Agency (ATMA)',
-    description: 'Focuses on agricultural extension reforms to provide training and technology to farmers.',
-    eligibility: 'All farmers and rural communities',
-    startDate: '2014-05-15',
-    endDate: '2025-03-31',
-    status: 'closing',
-    beneficiaries: 376
-  },
-];
+const TagIcon = ({ size = 14, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+  </svg>
+);
+
+const MapPinIcon = ({ size = 14, className = "" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  </svg>
+);
 
 const statusColors = {
   active: 'bg-green-100 text-green-800',
   closing: 'bg-yellow-100 text-yellow-800',
   closed: 'bg-red-100 text-red-800',
+};
+
+const schemeTypes = ["national", "state", "specialized"];
+
+// List of Indian states and union territories
+const indianStates = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
+  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", 
+  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  // Union Territories
+  "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", 
+  "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
+];
+
+// API service for schemes
+const SchemesAPI = {
+  // Fetch all schemes
+  fetchSchemes: async () => {
+    try {
+      const response = await fetch('/admin/schemes');
+      if (!response.ok) throw new Error('Failed to fetch schemes');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching schemes:', error);
+      // Return empty array for now (in production, handle this better)
+      return [];
+    }
+  },
+  
+  // Create a new scheme
+  createScheme: async (schemeData) => {
+    try {
+      console.log('Creating scheme:', schemeData);
+
+      const response = await fetch('/admin/schemes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(schemeData)
+      });
+      console.log('Creating scheme:', schemeData);
+
+      if (!response.ok) throw new Error('Failed to create scheme');
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating scheme:', error);
+      throw error;
+    }
+  },
+  
+  // Update an existing scheme
+  updateScheme: async (id, schemeData) => {
+    try {
+      const response = await fetch(`/api/schemes/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(schemeData)
+      });
+      if (!response.ok) throw new Error('Failed to update scheme');
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating scheme:', error);
+      throw error;
+    }
+  },
+  
+  // Delete a scheme
+  deleteScheme: async (id) => {
+    try {
+      const response = await fetch(`/api/schemes/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error('Failed to delete scheme');
+      return true;
+    } catch (error) {
+      console.error('Error deleting scheme:', error);
+      throw error;
+    }
+  }
 };
 
 // Scheme modal component
@@ -134,20 +174,33 @@ const SchemeModal = ({ isOpen, onClose, scheme = null, onSave }) => {
     startDate: new Date().toISOString().split('T')[0],
     endDate: '',
     status: 'active',
-    beneficiaries: 0
+    beneficiaries: 0,
+    officialWebsite: '',
+    guidelinesUrl: '',
+    schemeType: 'national', // Default to national
+    stateName: '' // Added field for state name
   };
 
   const [formData, setFormData] = useState(scheme || initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
-    onClose();
+    setIsSubmitting(true);
+    
+    try {
+      await onSave(formData);
+      onClose();
+    } catch (error) {
+      alert('Failed to save scheme. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -204,6 +257,44 @@ const SchemeModal = ({ isOpen, onClose, scheme = null, onSave }) => {
               ></textarea>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Scheme Type
+              </label>
+              <select
+                name="schemeType"
+                value={formData.schemeType}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              >
+                <option value="national">National</option>
+                <option value="state">State-level</option>
+                <option value="specialized">Specialized</option>
+              </select>
+            </div>
+
+            {/* State selection dropdown - only shown when scheme type is "state" */}
+            {formData.schemeType === 'state' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  State
+                </label>
+                <select
+                  name="stateName"
+                  value={formData.stateName}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  required
+                >
+                  <option value="">Select a state</option>
+                  {indianStates.map(state => (
+                    <option key={state} value={state}>{state}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -250,15 +341,29 @@ const SchemeModal = ({ isOpen, onClose, scheme = null, onSave }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Current Beneficiaries
+                Official Website URL
               </label>
               <input
-                type="number"
-                name="beneficiaries"
-                value={formData.beneficiaries}
+                type="url"
+                name="officialWebsite"
+                value={formData.officialWebsite}
                 onChange={handleChange}
+                placeholder="https://example.gov.in/scheme"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                min="0"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Guidelines Document URL
+              </label>
+              <input
+                type="url"
+                name="guidelinesUrl"
+                value={formData.guidelinesUrl}
+                onChange={handleChange}
+                placeholder="https://example.gov.in/guidelines.pdf"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
           </div>
@@ -268,14 +373,16 @@ const SchemeModal = ({ isOpen, onClose, scheme = null, onSave }) => {
               type="button"
               onClick={onClose}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              disabled={isSubmitting}
             >
               Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              disabled={isSubmitting}
             >
-              Save
+              {isSubmitting ? 'Saving...' : 'Save'}
             </button>
           </div>
         </form>
@@ -286,13 +393,38 @@ const SchemeModal = ({ isOpen, onClose, scheme = null, onSave }) => {
 
 // Main SchemesPage component
 const SchemesPage = () => {
-  const [schemes, setSchemes] = useState(MOCK_SCHEMES);
+  const [schemes, setSchemes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
+  const [stateFilter, setStateFilter] = useState(''); // Added state filter
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentScheme, setCurrentScheme] = useState(null);
 
-  // Filter schemes based on search term and status filter
+  // Fetch schemes on component mount
+  useEffect(() => {
+    fetchSchemes();
+  }, []);
+
+  const fetchSchemes = async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const data = await SchemesAPI.fetchSchemes();
+      setSchemes(data);
+    } catch (error) {
+      setError('Failed to fetch schemes. Please try again later.');
+      console.error('Error fetching schemes:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Filter schemes based on search term, status filter, type filter, and state filter
   const filteredSchemes = schemes.filter(scheme => {
     const matchesSearch = searchTerm === '' || 
       scheme.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -300,8 +432,11 @@ const SchemesPage = () => {
       scheme.eligibility.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === '' || scheme.status === statusFilter;
+    const matchesType = typeFilter === '' || scheme.schemeType === typeFilter;
+    const matchesState = stateFilter === '' || 
+      (scheme.schemeType === 'state' && scheme.stateName === stateFilter);
     
-    return matchesSearch && matchesStatus;
+    return matchesSearch && matchesStatus && matchesType && matchesState;
   });
 
   // Handle search input
@@ -312,6 +447,20 @@ const SchemesPage = () => {
   // Handle status filter change
   const handleStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
+  };
+
+  // Handle type filter change
+  const handleTypeFilterChange = (e) => {
+    setTypeFilter(e.target.value);
+    // Reset state filter when changing type filter
+    if (e.target.value !== 'state') {
+      setStateFilter('');
+    }
+  };
+
+  // Handle state filter change
+  const handleStateFilterChange = (e) => {
+    setStateFilter(e.target.value);
   };
 
   // Open modal for adding new scheme
@@ -327,26 +476,35 @@ const SchemesPage = () => {
   };
 
   // Save new or edited scheme
-  const handleSaveScheme = (schemeData) => {
-    if (currentScheme) {
-      // Edit existing scheme
-      setSchemes(
-        schemes.map((s) => (s.id === currentScheme.id ? { ...schemeData, id: s.id } : s))
-      );
-    } else {
-      // Add new scheme
-      const newScheme = {
-        ...schemeData,
-        id: Math.max(0, ...schemes.map((s) => s.id)) + 1,
-      };
-      setSchemes([...schemes, newScheme]);
+  const handleSaveScheme = async (schemeData) => {
+    try {
+      if (currentScheme) {
+        // Edit existing scheme
+        const updatedScheme = await SchemesAPI.updateScheme(currentScheme.id, schemeData);
+        setSchemes(prevSchemes => 
+          prevSchemes.map(s => s.id === currentScheme.id ? updatedScheme : s)
+        );
+      } else {
+        // Add new scheme
+        const newScheme = await SchemesAPI.createScheme(schemeData);
+        setSchemes(prevSchemes => [...prevSchemes, newScheme]);
+      }
+      return true;
+    } catch (error) {
+      console.error('Error saving scheme:', error);
+      throw error;
     }
   };
 
   // Delete a scheme
-  const handleDeleteScheme = (id) => {
+  const handleDeleteScheme = async (id) => {
     if (window.confirm('Are you sure you want to delete this scheme?')) {
-      setSchemes(schemes.filter((s) => s.id !== id));
+      try {
+        await SchemesAPI.deleteScheme(id);
+        setSchemes(prevSchemes => prevSchemes.filter(s => s.id !== id));
+      } catch (error) {
+        alert('Failed to delete scheme. Please try again.');
+      }
     }
   };
 
@@ -355,6 +513,41 @@ const SchemesPage = () => {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString();
   };
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-red-50 p-4 rounded-md">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-red-800">{error}</h3>
+            <div className="mt-2">
+              <button 
+                onClick={fetchSchemes}
+                className="text-sm font-medium text-red-600 hover:text-red-500"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -390,7 +583,7 @@ const SchemesPage = () => {
               onChange={handleSearch}
             />
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
             <select 
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
               value={statusFilter}
@@ -401,6 +594,31 @@ const SchemesPage = () => {
               <option value="closing">Closing Soon</option>
               <option value="closed">Closed</option>
             </select>
+            
+            <select 
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+              value={typeFilter}
+              onChange={handleTypeFilterChange}
+            >
+              <option value="">All Types</option>
+              <option value="national">National</option>
+              <option value="state">State-level</option>
+              <option value="specialized">Specialized</option>
+            </select>
+
+            {/* State filter - only shown when type filter is 'state' */}
+            {typeFilter === 'state' && (
+              <select 
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+                value={stateFilter}
+                onChange={handleStateFilterChange}
+              >
+                <option value="">All States</option>
+                {indianStates.map(state => (
+                  <option key={state} value={state}>{state}</option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
       </div>
@@ -412,22 +630,38 @@ const SchemesPage = () => {
             <div key={scheme.id} className="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
               <div className="p-5">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">{scheme.name}</h3>
-                  <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[scheme.status]}`}>
-                    {scheme.status === 'active' ? 'Active' : 
-                     scheme.status === 'closing' ? 'Closing Soon' : 'Closed'}
-                  </span>
+                  <div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">{scheme.name}</h3>
+                    <div className="flex items-center mb-2 flex-wrap gap-2">
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[scheme.status]}`}>
+                        {scheme.status === 'active' ? 'Active' : 
+                        scheme.status === 'closing' ? 'Closing Soon' : 'Closed'}
+                      </span>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs leading-5 font-semibold rounded-full flex items-center">
+                        <TagIcon size={12} className="mr-1" />
+                        {scheme.schemeType.charAt(0).toUpperCase() + scheme.schemeType.slice(1)}
+                      </span>
+                      
+                      {/* Display state name if it's a state-level scheme */}
+                      {scheme.schemeType === 'state' && scheme.stateName && (
+                        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs leading-5 font-semibold rounded-full flex items-center">
+                          <MapPinIcon size={12} className="mr-1" />
+                          {scheme.stateName}
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 
                 <p className="text-gray-600 mb-4">{scheme.description}</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <h4 className="text-sm font-medium text-gray-500 mb-1">Eligibility</h4>
                     <p className="text-sm">{scheme.eligibility}</p>
                   </div>
                   <div>
-                    <h4 className="text-sm font-medium text-gray-500 mb-1">Duration</h4>
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">Duration</h4>
                     <div className="flex items-center text-sm">
                       <CalendarIcon size={14} className="mr-1 text-gray-400" />
                       <span>
@@ -436,25 +670,33 @@ const SchemesPage = () => {
                       </span>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-500 mb-1">Beneficiaries</h4>
-                    <div className="flex items-center text-sm">
-                      <UsersIcon size={14} className="mr-1 text-gray-400" />
-                      <span>{scheme.beneficiaries.toLocaleString()}</span>
-                    </div>
-                  </div>
                 </div>
                 
                 <div className="flex items-center justify-between pt-4 border-t">
                   <div className="flex space-x-3">
-                    <button className="flex items-center text-sm text-blue-600 hover:text-blue-800">
-                      <DownloadIcon />
-                      Guidelines
-                    </button>
-                    <button className="flex items-center text-sm text-blue-600 hover:text-blue-800">
-                      <ExternalLinkIcon />
-                      Official Website
-                    </button>
+                    {scheme.guidelinesUrl && (
+                      <a 
+                        href={scheme.guidelinesUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        <DownloadIcon />
+                        Guidelines
+                      </a>
+                    )}
+                    
+                    {scheme.officialWebsite && (
+                      <a 
+                        href={scheme.officialWebsite} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        <ExternalLinkIcon />
+                        Official Website
+                      </a>
+                    )}
                   </div>
                   
                   <div className="flex items-center space-x-3">
@@ -485,7 +727,7 @@ const SchemesPage = () => {
           </div>
           <h3 className="text-lg font-medium text-gray-800 mb-1">No schemes found</h3>
           <p className="text-gray-500 mb-4">
-            {searchTerm || statusFilter
+            {searchTerm || statusFilter || typeFilter || stateFilter
               ? "No matches found for your search. Try with different criteria."
               : "Start by adding government schemes for farmers."}
           </p>
