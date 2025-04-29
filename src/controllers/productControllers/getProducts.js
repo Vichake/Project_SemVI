@@ -14,6 +14,6 @@ export const getProducts = async(req,res)=>{
         });
     } catch (err) {
         console.error("Error fetching Products",err);
-        return res.status(500).json({message: "Server error"});
+        return res.status(500)  
     }
 };

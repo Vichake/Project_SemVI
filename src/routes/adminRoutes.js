@@ -10,7 +10,7 @@ import { deleteUsers } from '../controllers/userControllers/deleteUsers.js';
 const router = express.Router();
 
 router
-.post('/contents',addContent)
+.post('/addcontents',addContent)
 .post("addInstruments",addInstruments)
 .post("updateInstruments",updateInstruments)
 .post("deleteInstruments",deleteInstruments)

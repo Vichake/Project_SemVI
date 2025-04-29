@@ -4,12 +4,12 @@ export const addProduct = async (req, res) => {
     try {
         const { productName, productCategory, productPrice, productQuantity, productDescription, user } = req.body;
         const product = new Product({
-            productName: productName,
-            productCategory: productCategory,
-            productPrice: productPrice,
-            productQuantity: productQuantity,
-            productDescription: productDescription,
-            user: user
+            productName,
+            productCategory,
+            productPrice,
+            productQuantity,
+            productDescription,
+            user
         });
         const savedProduct = await product.save();
         console.log("Product saved successfully:", savedProduct);
