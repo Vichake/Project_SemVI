@@ -1,8 +1,9 @@
-import { Scheme } from "../../models/scheme";
+import { Scheme } from "../../models/scheme.js";
 
 export const addSchemes = async(req,res)=>{
     try {
-        const { schemeName, schemeDescription, schemeEligibilty, startDate,endDate,instrumentStatus,currentBeneficiaries } = req.body;
+        const { schemeName, schemeDescription, schemeEligibilty, startDate,endDate,instrumentStatus } = req.body;
+        console.log(req.body)
         const scheme = new Scheme({
             schemeName,
             schemeDescription,
@@ -10,7 +11,6 @@ export const addSchemes = async(req,res)=>{
             startDate,
             endDate,
             instrumentStatus,
-            currentBeneficiaries,
         });
         const savedScheme = await scheme.save();
         console.log("Product saved successfully:", savedScheme);

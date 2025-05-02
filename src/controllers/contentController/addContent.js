@@ -1,8 +1,7 @@
-import { Content } from "../models/Content.js";
+import { Content } from "../../models/Content.js";
 export const addContent = async (req, res) => {
         try {
-            const {title, type, description, thumbnail, url, duration} = req.body;
-            console.log("Request body:", req.body);
+            const {title, type, category, description, thumbnail, url, duration} = req.body;
             if (!title || !type || !description || !thumbnail || !url) {
                 return res.status(400).json({ message: "All fields are required" });
             }
@@ -12,6 +11,7 @@ export const addContent = async (req, res) => {
             const content = new Content({
                 title: title,
                 type: type,
+                category: category,
                 description: description,
                 thumbnail: thumbnail,
                 url: url,

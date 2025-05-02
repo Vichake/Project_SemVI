@@ -20,7 +20,6 @@ const schemeSchema = new mongoose.Schema({
 },
     endDate:{
     type:Date,
-    required:true
 },
     instrumentStatus:{
     type:String,

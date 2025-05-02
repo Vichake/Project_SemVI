@@ -1,4 +1,4 @@
-import { Scheme } from "../../models/scheme";
+import { Scheme } from "../../models/scheme.js";
 
 export const updateSchemes = async (req, res) => {
   try {

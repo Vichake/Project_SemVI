@@ -4,8 +4,8 @@ export const updateInstruments = async (req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
-
     const updatedInstrument = await Instrument.findByIdAndUpdate(id, updates, { new: true });
+
 
     if (!updatedInstrument) {
       return res.status(404).json({ error: "Instrument not found" });

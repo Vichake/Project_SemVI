@@ -10,6 +10,11 @@ const contentSchema = new mongoose.Schema({
     enum: ['article', 'video'],
     required: true,
   },
+  category: {
+    type: String,
+    enum: ['Crop Rotation', 'Soil and Water Conservation', 'Pest Management', 'Livestock Management', 'Agroforestry','Smart Farming'],
+    required: true,
+  },
   description: {
     type: String,
     required: true,

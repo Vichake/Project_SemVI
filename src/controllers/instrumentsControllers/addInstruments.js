@@ -1,14 +1,29 @@
-import {Instrument} from "../../models/instruments.js";
+import { Instrument } from "../../models/instruments.js";
 
 export const addInstruments = async (req, res) => {
   try {
-    const { instrumentName, instrumentCategory, instrumentStatus, lastServiceDate } = req.body;
-
-    const newInstrument = new Instrument({
+    const {
       instrumentName,
       instrumentCategory,
       instrumentStatus,
+      rentPerHour,
+      location,
+      farmer,
+      contactNumber,
       lastServiceDate,
+      quantity
+    } = req.body;
+    console.log("Request body:", req.body); // Log the request body to see what is being sent
+    const newInstrument = new Instrument({
+      instrumentName: instrumentName,
+      instrumentCategory: instrumentCategory,
+      instrumentStatus: instrumentStatus,
+      rentPerHour: rentPerHour,
+      location: location,
+      farmer: farmer,
+      contactNumber: contactNumber,
+      lastServiceDate: lastServiceDate,
+      quantity: quantity,
     });
 
     const savedInstrument = await newInstrument.save();
