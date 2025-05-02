@@ -8,7 +8,7 @@ import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js"; // Now this will work 
 import userRoutes from "./src/routes/userRoutes.js"; // Now this will work
 import adminRoutes from "./src/routes/adminRoutes.js"; // Now this will work
-
+import stripeRoutes from "./src/routes/stripe.js";
 
 dotenv.config();
 connectDB();
@@ -21,6 +21,7 @@ app.use(cors());
 app.use("/api", authRoutes);
 app.use("/user", userRoutes); 
 app.use("/admin", adminRoutes);
+app.use('/stripe', stripeRoutes);
 // app.get('/', (req,res)=>{
 //     res.send('API is running...')
 // })
