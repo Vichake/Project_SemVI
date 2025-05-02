@@ -5,12 +5,9 @@ export const getSchemes = async (req,res)=>{
         const scheme = await Scheme.find().sort({createdAt: -1});
 
         if(!scheme.length){
-            return res.status(404).json({message: "No products found"});
+            return res.status(404).json({message: "No Schemes found"});
         }
-        return res.status(200).json({
-            message: "Products fetched successfully",
-            data: scheme,
-        });
+        return res.status(200).json(scheme)
     } catch (err) {
         console.error("Error fetching Scheme",err);
         res.status(500).json({message: "Server error"});

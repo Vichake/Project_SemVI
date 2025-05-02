@@ -10,7 +10,6 @@ export const updateSchemes = async (req, res) => {
     if (!updatedSchemes) {
       return res.status(404).json({ error: "Instrument not found" });
     }
-
     res.status(200).json(updatedSchemes);
   } catch (error) {
     console.error("Error updating instrument:", error.message);
