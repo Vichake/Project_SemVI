@@ -5,9 +5,9 @@ import EquipmentGrid from '../../components/RentInstruments/EquipmentGrid';
 import ModelDialog from '../../components/RentInstruments/ModelDialog';
 import RentalForm from '../../components/RentInstruments/RentalForm';
 import ToastNotification from '../../components/RentInstruments/ToastNotification';
-import LocationFilter from '../../components/RentInstruments/LocationFilter';  // New component
 import Header from '../../components/Header';
 import { useUser } from '../../context/userContext';
+import { API_URL } from '../../context/config';
 import './css/RentInstruments.css';
 
 const RentInstruments = () => {
@@ -19,79 +19,37 @@ const RentInstruments = () => {
   const [toast, setToast] = useState({ show: false, title: '', message: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const [locationRange, setLocationRange] = useState(20); // default to 20km
-  const [locationPermission, setLocationPermission] = useState('pending');
   const { userData } = useUser();
-
-  // Get user's current location
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-          setLocationPermission('granted');
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setLocationPermission('denied');
-        }
-      );
-    } else {
-      setLocationPermission('unsupported');
-    }
-  }, []);
-
-  // Calculate distance between two coordinates using Haversine formula
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371; // Earth's radius in km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2); 
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    const distance = R * c; // Distance in km
-    return distance;
-  };
 
   // Fetch equipment data from the database
   useEffect(() => {
     const fetchEquipment = async () => {
       setLoading(true);
       try {
-        // Get all equipment with location data
-        const response = await fetch('http://localhost:5000/admin/getInstruments');
+        // Get all equipment
+        const response = await fetch(`${API_URL}/admin/getInstruments`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         console.log("Fetched equipment data:", data);
-        // Transform the data and include distance calculation if user location is available
+        
+        // Transform the data to match our component structure
         const formattedData = data.map(item => ({
           id: item._id,
-          name: item.name,
-          category: item.category,
-          description: item.description,
-          image: item.image || `/images/${item.category}1.jpg`, // Fallback image
-          price: item.price,
-          models: item.models || [{ id: `${item._id}-default`, name: 'Standard', price: item.price }],
+          name: item.instrumentName,
+          category: item.instrumentCategory,
+          description: `Provided by ${item.farmer}`,
+          image: `/images/${item.instrumentCategory}1.jpg`, // Fallback image based on category
+          price: item.rentPerHour,
+          models: [{ id: `${item._id}-default`, name: 'Standard', price: item.rentPerHour }],
           location: {
-            latitude: item.latitude || 0,
-            longitude: item.longitude || 0,
-            address: item.address || 'Location not specified'
+            address: item.location || 'Location not specified'
           },
-          distance: userLocation ? 
-            calculateDistance(
-              userLocation.latitude, 
-              userLocation.longitude, 
-              item.latitude || 0, 
-              item.longitude || 0
-            ) : null
+          quantity: item.quantity,
+          status: item.instrumentStatus,
+          lastServiceDate: new Date(item.lastServiceDate).toLocaleDateString(),
+          contactNumber: item.contactNumber
         }));
         
         setEquipmentList(formattedData);
@@ -109,17 +67,18 @@ const RentInstruments = () => {
             category: 'tractor',
             description: 'High-power tractor suitable for heavy-duty tasks.',
             image: '/images/tractor1.jpg',
-            price: 100,
+            price: 1200,
             models: [
-              { id: 101, name: 'Model A1', price: 90 },
-              { id: 102, name: 'Model A2', price: 110 },
+              { id: 101, name: 'Model A1', price: 1200 },
+              { id: 102, name: 'Model A2', price: 1400 },
             ],
             location: {
-              latitude: 37.7749,
-              longitude: -122.4194,
-              address: 'San Francisco, CA'
+              address: 'Nerul West, Navi Mumbai'
             },
-            distance: 5 // Mock distance
+            quantity: 5,
+            status: 'active',
+            lastServiceDate: '31/05/2025',
+            contactNumber: '+91 9665419502'
           },
           {
             id: 2,
@@ -127,17 +86,18 @@ const RentInstruments = () => {
             category: 'harvester',
             description: 'Efficient and fast crop harvesting.',
             image: '/images/harvester1.jpg',
-            price: 120,
+            price: 1500,
             models: [
-              { id: 201, name: 'X200 Pro', price: 130 },
-              { id: 202, name: 'X200 Max', price: 150 },
+              { id: 201, name: 'X200 Pro', price: 1500 },
+              { id: 202, name: 'X200 Max', price: 1800 },
             ],
             location: {
-              latitude: 37.7833,
-              longitude: -122.4167,
-              address: 'Oakland, CA'
+              address: 'Kharghar, Navi Mumbai'
             },
-            distance: 15 // Mock distance
+            quantity: 3,
+            status: 'active',
+            lastServiceDate: '15/05/2025',
+            contactNumber: '+91 9898765432'
           },
           {
             id: 3,
@@ -145,17 +105,18 @@ const RentInstruments = () => {
             category: 'plow',
             description: 'Strong and reliable plowing tool.',
             image: '/images/plow1.jpg',
-            price: 60,
+            price: 800,
             models: [
-              { id: 301, name: 'Standard', price: 60 },
-              { id: 302, name: 'Deluxe', price: 75 },
+              { id: 301, name: 'Standard', price: 800 },
+              { id: 302, name: 'Deluxe', price: 950 },
             ],
             location: {
-              latitude: 37.8044,
-              longitude: -122.2711,
-              address: 'Berkeley, CA'
+              address: 'Vashi, Navi Mumbai'
             },
-            distance: 25 // Mock distance
+            quantity: 8,
+            status: 'active',
+            lastServiceDate: '20/04/2025',
+            contactNumber: '+91 9765432100'
           },
         ];
         
@@ -167,9 +128,9 @@ const RentInstruments = () => {
     };
 
     fetchEquipment();
-  }, [userLocation]); // Re-fetch when user location changes
+  }, []);
 
-  // Filter equipment by category and location range
+  // Filter equipment by category
   useEffect(() => {
     let filtered = equipmentList;
     
@@ -178,19 +139,12 @@ const RentInstruments = () => {
       filtered = filtered.filter(item => item.category === activeCategory);
     }
     
-    // Apply location range filter if user location is available
-    if (userLocation && locationRange > 0) {
-      filtered = filtered.filter(item => 
-        item.distance !== null && item.distance <= locationRange
-      );
-    }
+    // Only show active equipment
+    filtered = filtered.filter(item => item.status === 'active');
     
     setFilteredEquipmentList(filtered);
-  }, [equipmentList, activeCategory, locationRange, userLocation]);
+  }, [equipmentList, activeCategory]);
 
-  // Extract unique categories
-  const categories = ['all', ...new Set(equipmentList.map(item => item.category))];
-  
   const handleSelectModel = (equipment) => {
     setSelectedEquipment(equipment);
   };
@@ -198,10 +152,6 @@ const RentInstruments = () => {
   const handleModelChoose = (model) => {
     setSelectedModel(model);
     setSelectedEquipment((prev) => ({ ...prev, selectedModel: model }));
-  };
-
-  const handleRangeChange = (newRange) => {
-    setLocationRange(newRange);
   };
 
   const handleFormSubmit = async (e) => {
@@ -213,15 +163,15 @@ const RentInstruments = () => {
       equipmentId: selectedEquipment.id,
       modelId: selectedModel.id,
       userId: userData?.id,
-      startDate: formData.get('startDate'),
-      endDate: formData.get('endDate'),
-      quantity: formData.get('quantity'),
+      name: formData.get('name'),
+      email: formData.get('email'),
+      duration: formData.get('duration'),
       // Add additional form fields as needed
     };
     
     // Submit rental to backend
     try {
-      const response = await fetch('http://localhost:5000/api/rentals', {
+      const response = await fetch(`${API_URL}/api/rentals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -237,7 +187,7 @@ const RentInstruments = () => {
       setToast({
         show: true,
         title: 'Rental Confirmed!',
-        message: `You have rented ${selectedEquipment.name} (${selectedModel.name}) successfully.`,
+        message: `You have rented ${selectedEquipment.name} (${selectedModel.name}) successfully for ${formData.get('duration')} days.`,
       });
       
       // Reset form
@@ -267,13 +217,6 @@ const RentInstruments = () => {
           <CategoryFilter 
             activeCategory={activeCategory} 
             setActiveCategory={setActiveCategory}
-            categories={categories}
-          />
-          
-          <LocationFilter 
-            locationRange={locationRange}
-            onRangeChange={handleRangeChange}
-            locationPermission={locationPermission}
           />
         </div>
         
@@ -291,9 +234,7 @@ const RentInstruments = () => {
           <EquipmentGrid equipmentList={filteredEquipmentList} onSelectModel={handleSelectModel} />
         ) : (
           <p className="no-equipment-message">
-            {locationPermission === 'denied' 
-              ? 'Location access is required to find nearby equipment. Please enable location services and refresh the page.'
-              : 'No equipment found within the selected range and category.'}
+            No equipment found for the selected category.
           </p>
         )}
       </section>

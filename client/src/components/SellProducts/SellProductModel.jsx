@@ -4,8 +4,8 @@ import { toast } from 'react-toastify';
 import { useUser } from '../../context/userContext.jsx';
 import { io } from 'socket.io-client';
 import { connectSellSocket } from '../../socket.js';
-
-const url = 'http://localhost:5000'; // Replace with your API URL
+import { API_URL } from '../../context/config.jsx';
+// const url = 'http://localhost:5000'; // Replace with your API URL
 
 function SellProductModal({ visible, onClose }) {
   const { userData } = useUser();
@@ -48,7 +48,7 @@ function SellProductModal({ visible, onClose }) {
 
   
     try {
-      const response = await fetch(`${url}/user/addProduct`, {
+      const response = await fetch(`${API_URL}/user/addProduct`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${idToken}`,

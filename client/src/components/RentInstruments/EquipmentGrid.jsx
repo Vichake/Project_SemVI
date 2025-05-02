@@ -1,3 +1,4 @@
+import React from 'react';
 import EquipmentCard from './EquipmentCard';
 
 const EquipmentGrid = ({ equipmentList, onSelectModel }) => (

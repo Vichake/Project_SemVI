@@ -5,8 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import './css/register.css';
-
-const API_URL = 'http://localhost:5000/api';
+import { API_URL } from '../../context/config';
+// const API_URL = 'http://localhost:5000';
 
 const translations = {
   en: {
@@ -160,7 +160,7 @@ const Signup = () => {
         refreshToken: user.refreshToken
       };
 
-      await axios.post(`${API_URL}/signup`, userData);
+      await axios.post(`${API_URL}/api/signup`, userData);
 
       toast.success('Registration successful! Please verify your email.', { position: "top-center" });
 

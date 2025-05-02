@@ -7,8 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-const url = 'http://localhost:5000/api';
+import { API_URL } from '../../context/config';
 
 const translations = {
   en: {
@@ -135,7 +134,7 @@ const Login = () => {
       }
 
       // MongoDB backend check
-      const response = await Axios.post(`${url}/login`, formData);
+      const response = await Axios.post(`${API_URL}/api/login`, formData);
 
       if (response.status === 200) {
         toast.success('Login successful! Redirecting...', {

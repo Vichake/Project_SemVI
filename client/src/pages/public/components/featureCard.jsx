@@ -67,7 +67,7 @@ function FeatureCards({ language }) {
       <div className="feature-grid">
         {featureData.map(({ id, img, alt, href, en, mr, desc, descMr }) => (
           <div className="feature-card" key={id}>
-            <a href={href} className="feature-card-link">
+            <a href="#" className="feature-card-link">
               <img src={img} alt={alt} className="feature-image" />
               <h3 id={id}>{language === 'mr' ? mr : en}</h3>
               <p>{language === 'mr' ? descMr : desc}</p>

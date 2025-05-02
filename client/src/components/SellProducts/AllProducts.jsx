@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { API_URL } from '../../context/config';
 
 function AllProducts() {
   const [products, setProducts] = useState([]);
@@ -79,7 +80,7 @@ function AllProducts() {
   const fetchAllProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/user/getProducts');
+      const response = await fetch(`${API_URL}/user/getProducts`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -273,54 +274,44 @@ function AllProducts() {
     fetchAllProducts();
     
     return () => {
-      // Clear buffer when component unmounts
       productBuffer.current = [];
       displayedIds.current.clear();
     };
   }, []);
 
-  // Calculate cart total whenever items change
   useEffect(() => {
     const total = cartItems.reduce((sum, item) => {
       return sum + (item.productPrice * item.quantity);
     }, 0);
     setCartTotal(total);
     
-    // Show cart if items are added, hide if empty
     if (cartItems.length > 0) {
       setIsCartVisible(true);
     }
   }, [cartItems]);
 
-  // Add product to cart
   const handleBuy = (product) => {
     setCartItems(prevItems => {
-      // Check if product already exists in cart
       const existingItemIndex = prevItems.findIndex(item => item.uniqueId === product.uniqueId);
       
       if (existingItemIndex !== -1) {
-        // Increment quantity if product already in cart
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex].quantity += 1;
         return updatedItems;
       } else {
-        // Add new product to cart with quantity 1
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
   };
 
-  // Remove item from cart
   const removeFromCart = (productId) => {
     setCartItems(prevItems => prevItems.filter(item => item.uniqueId !== productId));
     
-    // Hide cart if it becomes empty
     if (cartItems.length <= 1) {
       setIsCartVisible(false);
     }
   };
 
-  // Increase item quantity
   const increaseQuantity = (productId) => {
     setCartItems(prevItems => 
       prevItems.map(item => 
@@ -331,7 +322,6 @@ function AllProducts() {
     );
   };
 
-  // Decrease item quantity
   const decreaseQuantity = (productId) => {
     setCartItems(prevItems => 
       prevItems.map(item => 
@@ -342,14 +332,12 @@ function AllProducts() {
     );
   };
 
-  // Toggle cart visibility
   const toggleCart = () => {
     if (cartItems.length > 0) {
       setIsCartVisible(!isCartVisible);
     }
   };
 
-  // Reset filters function
   const resetFilters = () => {
     setSearchTerm('');
     setSearchCategory('all');

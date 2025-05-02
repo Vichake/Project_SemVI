@@ -1,9 +1,11 @@
+import React from 'react';
+
 const categories = ['all', 'tractor', 'harvester', 'plow', 'planter', 'irrigation', 'fertilizer'];
 
 const CategoryFilter = ({ activeCategory, setActiveCategory }) => (
   <div className="farmgear-category-filter">
     {categories.map(cat => (
-      <button 
+      <button
         key={cat}
         className={`farmgear-filter-button ${activeCategory === cat ? 'farmgear-active' : ''}`}
         onClick={() => setActiveCategory(cat)}

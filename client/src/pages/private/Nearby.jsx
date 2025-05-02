@@ -4,9 +4,9 @@ import MarketCard from '../../components/MarketCard.jsx';
 import Header from '../../components/Header.jsx';
 import { useUser } from '../../context/userContext.jsx';
 import './css/Nearby.css';
-
+import { API_URL } from '../../context/config.jsx';
 const Nearby = () => {
-  const url = 'http://localhost:5000';
+  // const url = 'http://localhost:5000';
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +45,7 @@ const Nearby = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Axios.get(`${url}/user/getMarketData`);
+        const response = await Axios.get(`${API_URL}/user/getMarketData`);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connectSellSocket } from "../../socket.js"; // <-- Add this
 import { useUser } from "../../context/userContext.jsx";
-
+import { API_URL } from "../../context/config.jsx";
 const ProductCardList = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
-  const url = 'http://localhost:5000';
+  // const url = 'http://localhost:5000';
   // 🔁 Fetch products initially
   const fetchProducts = async () => {
     const token = localStorage.getItem("token");
@@ -15,7 +15,7 @@ const ProductCardList = () => {
     }
 
     try {
-      const response = await fetch(`${url}/user/getUsersProducts`, {
+      const response = await fetch(`${API_URL}/user/getUsersProducts`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const ProductCardList = () => {
     }
 
     try {
-      const response = await fetch(`${url}/user/deleteProducts`, {
+      const response = await fetch(`${API_URL}/user/deleteProducts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

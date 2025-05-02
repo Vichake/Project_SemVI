@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Axios from 'axios';
+import {API_URL} from './config'
 
 const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-  const url = 'http://localhost:5000/api';
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
       if (user) {
         try {
           const parsedUser = JSON.parse(user);
-          const response = await Axios.get(`${url}/getUser`, {
+          const response = await Axios.get(`${API_URL}/api/getUser`, {
             params: { userId: parsedUser }
           });
           // console.log(response.data);
