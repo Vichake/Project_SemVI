@@ -334,26 +334,7 @@ const Login = () => {
 
           {!resetMode && (
             <>
-              <div className="tk-social-login">
-                <p>{translations[lang].loginWith}</p>
-                <div className="tk-social-buttons">
-                  <button 
-                    type="button" 
-                    className="tk-social-btn tk-google"
-                    onClick={() => handleSocialLogin('Google')}
-                  >
-                    G
-                  </button>
-                  <button 
-                    type="button" 
-                    className="tk-social-btn tk-facebook"
-                    onClick={() => handleSocialLogin('Facebook')}
-                  >
-                    f
-                  </button>
-                </div>
-              </div>
-
+              
               <div className="tk-auth-links">
                 <span>{translations[lang].noAccount}</span>
                 <a className="tk-auth-link" href="/register">

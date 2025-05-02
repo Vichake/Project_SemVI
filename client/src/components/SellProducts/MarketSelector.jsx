@@ -76,19 +76,7 @@ function MarketSelector({ activeMarket, onMarketChange }) {
 
   return (
     <section className="market-selector">
-      <h2 className="section-title">Choose Your Market</h2>
-      <div className="market-pills">
-        {['local', 'regional', 'national', 'online'].map((market) => (
-          <button
-            key={market}
-            className={`market-pill ${activeMarket === market ? 'market-pill-active' : ''}`}
-            onClick={() => onMarketChange(market)}
-          >
-            {market.charAt(0).toUpperCase() + market.slice(1)}
-          </button>
-        ))}
-      </div>
-      
+      <h2 className="section-title">Search for Product...</h2>
       <div className="search-input-container">
         <input
           type="text"

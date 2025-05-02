@@ -357,7 +357,7 @@ function AllProducts() {
 
   return (
     <section className="products-section" id="AllProducts">
-      <h2>All Products</h2>
+      <h2>Explore Products</h2>
       
       {/* Search Bar */}
       <div className="product-search-container">

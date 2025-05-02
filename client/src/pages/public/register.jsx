@@ -295,14 +295,7 @@ const Signup = () => {
           </div>
         </form>
 
-        <div className="social-signup">
-          <button className="google-btn" onClick={() => handleSocialSignup('google')}>
-            {t.googleSignup}
-          </button>
-          <button className="facebook-btn" onClick={() => handleSocialSignup('facebook')}>
-            {t.facebookSignup}
-          </button>
-        </div>
+
       </div>
     </div>
   );
