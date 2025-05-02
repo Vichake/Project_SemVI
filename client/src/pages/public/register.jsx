@@ -19,7 +19,7 @@ const translations = {
     enterPhone: 'Phone Number',
     alreadyHaveAccount: 'Already have an account?',
     login: 'Log In',
-    farmersPortal: "TechKissan",
+    farmersPortal: "TechKisan",
     passwordRequirements: "Password must be at least 6 characters",
     phoneRequirements: "Enter a valid 10-digit phone number",
     requiredField: "This field is required",

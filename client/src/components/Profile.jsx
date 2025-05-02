@@ -33,7 +33,7 @@ export default function PersonalProfile({ onClose, userData }) {
               />
             </div>
             <MDBTypography tag="h5" className="pp-username">{userData?.name || 'User Name'}</MDBTypography>
-            <MDBCardText className="pp-user-role">{userData?.role || 'Full time berojgar'}</MDBCardText>
+            <MDBCardText className="pp-user-role">{userData?.role || ''}</MDBCardText>
           </MDBCol>
           
           <MDBCol md="8">
