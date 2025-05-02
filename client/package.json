@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^7.3.0",
     "axios": "^1.8.4",
     "feather-icons": "^4.29.2",
     "firebase": "^11.6.0",

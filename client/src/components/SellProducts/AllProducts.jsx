@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 
 function AllProducts() {
   const [products, setProducts] = useState([]);
@@ -12,12 +13,12 @@ function AllProducts() {
   const lastProductElementRef = useRef();
   const productBuffer = useRef([]);
   const displayedIds = useRef(new Set());
-  
+
   // Search functionality
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCategory, setSearchCategory] = useState('all');
   const [filteredBuffer, setFilteredBuffer] = useState([]);
-  
+
   // Cart state
   const [cartItems, setCartItems] = useState([]);
   const [isCartVisible, setIsCartVisible] = useState(false);
@@ -45,32 +46,32 @@ function AllProducts() {
     if (product.productImage) {
       return product.productImage;
     }
-    
+
     const productName = product.productName.toLowerCase();
-    
+
     // Check if the product name exactly matches a key in our mapping
     if (productImages[productName]) {
       return productImages[productName];
     }
-    
+
     // Check if the product name contains any of our keywords
     for (const [keyword, imageUrl] of Object.entries(productImages)) {
       if (productName.includes(keyword)) {
         return imageUrl;
       }
     }
-    
+
     // Default fallback image based on category
     if (product.productCategory) {
       const category = product.productCategory.toLowerCase();
-      
+
       for (const [categoryKeyword, imageUrl] of Object.entries(categoryImages)) {
         if (category.includes(categoryKeyword)) {
           return imageUrl;
         }
       }
     }
-    
+
     // Final fallback
     return `https://source.unsplash.com/featured/?farm,${encodeURIComponent(product.productName)}`;
   };
@@ -84,7 +85,7 @@ function AllProducts() {
         throw new Error('Network response was not ok');
       }
       const resData = await response.json();
-      
+
       if (resData?.data?.length > 0) {
         // Store all products in buffer, ensuring each has a unique ID
         productBuffer.current = resData.data.map((product, index) => ({
@@ -92,7 +93,7 @@ function AllProducts() {
           // Add a fallback unique ID if _id is missing or duplicate
           uniqueId: product._id || `fallback-id-${index}`
         }));
-        
+
         // Debug: Log product categories to see what's available
         const categories = new Set();
         productBuffer.current.forEach(product => {
@@ -101,10 +102,10 @@ function AllProducts() {
           }
         });
         console.log("Available categories:", [...categories]);
-        
+
         // Initialize filtered buffer to all products
         setFilteredBuffer(productBuffer.current);
-        
+
         // Load initial batch of products
         loadMoreProducts();
       } else {
@@ -124,29 +125,29 @@ function AllProducts() {
     setDisplayedProducts([]);
     displayedIds.current.clear();
     setCurrentIndex(0);
-    
+
     // Debug log to see current filter settings
     console.log("Filtering with search term:", searchTerm, "and category:", searchCategory);
-    
+
     // Filter the product buffer based on search term and category
     const filtered = productBuffer.current.filter(product => {
       const matchesSearch = product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           (product.productDescription && 
-                            product.productDescription.toLowerCase().includes(searchTerm.toLowerCase()));
-      
+        (product.productDescription &&
+          product.productDescription.toLowerCase().includes(searchTerm.toLowerCase()));
+
       // Modified category matching logic - use includes instead of exact match
-      const matchesCategory = searchCategory === 'all' || 
-                             (product.productCategory && 
-                              product.productCategory.toLowerCase().includes(searchCategory.toLowerCase()));
-      
+      const matchesCategory = searchCategory === 'all' ||
+        (product.productCategory &&
+          product.productCategory.toLowerCase().includes(searchCategory.toLowerCase()));
+
       return matchesSearch && matchesCategory;
     });
-    
+
     console.log(`Found ${filtered.length} matching products after filtering`);
-    
+
     setFilteredBuffer(filtered);
     setHasMore(filtered.length > 0);
-    
+
     // Load first batch of filtered results
     if (filtered.length > 0) {
       loadMoreFilteredProducts();
@@ -164,7 +165,7 @@ function AllProducts() {
 
     // Set loading true to show loading indicator
     setLoading(true);
-    
+
     // Add artificial delay for better UX (400ms)
     setTimeout(() => {
       // Get next batch from filtered buffer
@@ -180,15 +181,15 @@ function AllProducts() {
           displayedIds.current.add(id);
           return true;
         });
-      
+
       setDisplayedProducts(prev => [...prev, ...nextBatch]);
       setCurrentIndex(prev => prev + pageSize);
-      
+
       // Check if we've reached the end of our filtered buffer
       if (currentIndex + pageSize >= filteredBuffer.length) {
         setHasMore(false);
       }
-      
+
       setLoading(false);
     }, 400); // Shorter delay for search filtering
   };
@@ -199,7 +200,7 @@ function AllProducts() {
       loadMoreFilteredProducts();
       return;
     }
-    
+
     if (currentIndex >= productBuffer.current.length) {
       setHasMore(false);
       return;
@@ -207,7 +208,7 @@ function AllProducts() {
 
     // Set loading true to show loading indicator
     setLoading(true);
-    
+
     // Add artificial delay for better UX (800ms)
     setTimeout(() => {
       // Filter out products that are already displayed
@@ -223,15 +224,15 @@ function AllProducts() {
           displayedIds.current.add(id);
           return true;
         });
-      
+
       setDisplayedProducts(prev => [...prev, ...nextBatch]);
       setCurrentIndex(prev => prev + pageSize);
-      
+
       // Check if we've reached the end of our buffer
       if (currentIndex + pageSize >= productBuffer.current.length) {
         setHasMore(false);
       }
-      
+
       setLoading(false);
     }, 800); // 800ms delay to make loading visible
   };
@@ -240,7 +241,7 @@ function AllProducts() {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
-  
+
   // Handle category selection change
   const handleCategoryChange = (e) => {
     const category = e.target.value;
@@ -252,17 +253,17 @@ function AllProducts() {
   useEffect(() => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
-    
+
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && hasMore) {
         loadMoreProducts();
       }
     }, { threshold: 0.1 });
-    
+
     if (lastProductElementRef.current) {
       observer.current.observe(lastProductElementRef.current);
     }
-    
+
     return () => {
       if (observer.current) observer.current.disconnect();
     };
@@ -271,7 +272,7 @@ function AllProducts() {
   // Initial data fetch
   useEffect(() => {
     fetchAllProducts();
-    
+
     return () => {
       // Clear buffer when component unmounts
       productBuffer.current = [];
@@ -285,7 +286,7 @@ function AllProducts() {
       return sum + (item.productPrice * item.quantity);
     }, 0);
     setCartTotal(total);
-    
+
     // Show cart if items are added, hide if empty
     if (cartItems.length > 0) {
       setIsCartVisible(true);
@@ -297,7 +298,7 @@ function AllProducts() {
     setCartItems(prevItems => {
       // Check if product already exists in cart
       const existingItemIndex = prevItems.findIndex(item => item.uniqueId === product.uniqueId);
-      
+
       if (existingItemIndex !== -1) {
         // Increment quantity if product already in cart
         const updatedItems = [...prevItems];
@@ -313,7 +314,7 @@ function AllProducts() {
   // Remove item from cart
   const removeFromCart = (productId) => {
     setCartItems(prevItems => prevItems.filter(item => item.uniqueId !== productId));
-    
+
     // Hide cart if it becomes empty
     if (cartItems.length <= 1) {
       setIsCartVisible(false);
@@ -322,10 +323,10 @@ function AllProducts() {
 
   // Increase item quantity
   const increaseQuantity = (productId) => {
-    setCartItems(prevItems => 
-      prevItems.map(item => 
-        item.uniqueId === productId 
-          ? { ...item, quantity: item.quantity + 1 } 
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.uniqueId === productId
+          ? { ...item, quantity: item.quantity + 1 }
           : item
       )
     );
@@ -333,10 +334,10 @@ function AllProducts() {
 
   // Decrease item quantity
   const decreaseQuantity = (productId) => {
-    setCartItems(prevItems => 
-      prevItems.map(item => 
+    setCartItems(prevItems =>
+      prevItems.map(item =>
         item.uniqueId === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 } 
+          ? { ...item, quantity: item.quantity - 1 }
           : item
       )
     );
@@ -355,21 +356,63 @@ function AllProducts() {
     setSearchCategory('all');
   };
 
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY); // Replace with your real Stripe publishable key
+
+  const handleCheckout = async () => {
+    try {
+      const stripe = await stripePromise;
+
+      // Prepare line items from cartItems
+      const lineItems = cartItems.map(item => ({
+        price_data: {
+          currency: 'inr',
+          product_data: {
+            name: item.productName,
+          },
+          unit_amount: Math.round(item.productPrice * 100), // Stripe uses paise
+        },
+        quantity: item.quantity,
+      }));
+
+      // Call your backend to create a checkout session
+      const response = await fetch('http://localhost:5000/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: lineItems }),
+      });
+
+      const session = await response.json();
+
+      // Redirect to Stripe Checkout
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+    }
+  };
+
   return (
     <section className="products-section" id="AllProducts">
       <h2>Explore Products</h2>
-      
+
       {/* Search Bar */}
       <div className="product-search-container">
         <div className="search-wrapper">
-          <input 
-            type="text" 
-            className="product-search-input" 
-            placeholder="Search for products..." 
+          <input
+            type="text"
+            className="product-search-input"
+            placeholder="Search for products..."
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <select 
+          <select
             className="product-category-select"
             value={searchCategory}
             onChange={handleCategoryChange}
@@ -390,7 +433,7 @@ function AllProducts() {
         </div>
         {(searchTerm || searchCategory !== 'all') && (
           <div className="search-results-info">
-            {searchTerm && `Showing results for "${searchTerm}"`} 
+            {searchTerm && `Showing results for "${searchTerm}"`}
             {searchTerm && searchCategory !== 'all' && ' in '}
             {searchCategory !== 'all' && searchCategory}
             {filteredBuffer.length > 0 && `: ${filteredBuffer.length} products found`}
@@ -400,7 +443,7 @@ function AllProducts() {
           </div>
         )}
       </div>
-      
+
       {/* Floating Cart */}
       <div className={`floating-cart ${isCartVisible ? 'visible' : ''}`}>
         <div className="cart-header">
@@ -409,7 +452,7 @@ function AllProducts() {
             {isCartVisible ? '−' : '+'}
           </button>
         </div>
-        
+
         {isCartVisible && (
           <div className="cart-content">
             {cartItems.length > 0 ? (
@@ -429,8 +472,8 @@ function AllProducts() {
                         <span>{item.quantity}</span>
                         <button onClick={() => increaseQuantity(item.uniqueId)}>+</button>
                       </div>
-                      <button 
-                        className="remove-item" 
+                      <button
+                        className="remove-item"
                         onClick={() => removeFromCart(item.uniqueId)}
                       >
                         ×
@@ -443,7 +486,7 @@ function AllProducts() {
                     <span>Total:</span>
                     <span>Rs.{cartTotal.toFixed(2)}</span>
                   </div>
-                  <button className="checkout-button">Proceed to Checkout</button>
+                  <button className="checkout-button" onClick={handleCheckout}>Proceed to Checkout</button>
                 </div>
               </>
             ) : (
@@ -452,7 +495,7 @@ function AllProducts() {
           </div>
         )}
       </div>
-      
+
       <div className="products-grid">
         {displayedProducts.map((product, index) => (
           <div
@@ -492,25 +535,25 @@ function AllProducts() {
           </div>
         ))}
       </div>
-      
+
       {loading && (
         <div className="loading-indicator">
           <div className="loading-spinner"></div>
           <p>Loading products...</p>
         </div>
       )}
-      
+
       {!hasMore && displayedProducts.length > 0 && (
         <div className="end-message">No more products to load</div>
       )}
-      
+
       {!loading && displayedProducts.length === 0 && allProductsLoaded && (
         <div className="no-products">
-          {searchTerm || searchCategory !== 'all' ? 
+          {searchTerm || searchCategory !== 'all' ?
             <div>
               <p>No products found matching your filters</p>
               <button onClick={resetFilters} className="reset-button">Reset Filters</button>
-            </div> 
+            </div>
             : 'No products available at the moment'
           }
         </div>
