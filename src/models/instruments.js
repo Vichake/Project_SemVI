@@ -8,7 +8,7 @@ const instrumentSchema = new mongoose.Schema({
   instrumentCategory: {
     type: String,
     required: true,
-    enum: ['Farm Equipment', 'Heavy Machinery', 'Tools', 'Irrigation']
+    enum: ['tractor', 'harvester', 'plow', 'planter', 'irrigation', 'fertilizer']
   },
   instrumentStatus: {
     type: String,
