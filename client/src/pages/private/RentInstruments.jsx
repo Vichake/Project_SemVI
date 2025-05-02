@@ -65,12 +65,12 @@ const RentInstruments = () => {
       setLoading(true);
       try {
         // Get all equipment with location data
-        const response = await fetch('http://localhost:5000/api/equipment');
+        const response = await fetch('http://localhost:5000/admin/getInstruments');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        
+        console.log("Fetched equipment data:", data);
         // Transform the data and include distance calculation if user location is available
         const formattedData = data.map(item => ({
           id: item._id,

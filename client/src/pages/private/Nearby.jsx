@@ -124,8 +124,8 @@ const Nearby = () => {
               </button>
               <h2 className="nearby-view__market-title">{selectedMarket.name}</h2>
               <div className="nearby-view__market-info">
-                <p className="nearby-view__market-description"><strong>Description:</strong> {selectedMarket.description}</p>
-                <p className="nearby-view__market-address"><strong>Address:</strong> {selectedMarket.address}</p>
+                <p className="nearby-view__market-description"><strong>Description:</strong> Best market near you</p>
+                <p className="nearby-view__market-address"><strong>Address:</strong> Vashi, Navi Mumbai</p>
                 <p className="nearby-view__market-distance"><strong>Distance:</strong> {selectedMarket.distance?.toFixed(2)} km</p>
                 {/* Add more info here if available */}
               </div>

@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
   const [formData, setFormData] = useState({
     title: '',
-    type: 'article',    
+    type: 'article',
     description: '',
     thumbnail: '',
     url: '',
     duration: '',
+    category: '', // new field
   });
 
   // Update form data when editing content changes
@@ -20,9 +21,9 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
         thumbnail: content.thumbnail || '',
         url: content.url || '',
         duration: content.duration || '',
+        category: content.category || '',
       });
     } else {
-      // Reset form when adding new content
       setFormData({
         title: '',
         type: 'article',
@@ -30,6 +31,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
         thumbnail: '',
         url: '',
         duration: '',
+        category: '',
       });
     }
   }, [content, isOpen]);
@@ -41,19 +43,16 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Prepare the data for submission
+
     const submissionData = {
       ...formData,
-      // Keep the original ID if editing
       ...(content && { id: content.id }),
     };
-    
-    // Make sure video has duration
+
     if (submissionData.type === 'video' && !submissionData.duration) {
       submissionData.duration = '00:00';
     }
-    
+
     onSave(submissionData);
   };
 
@@ -69,6 +68,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
+            {/* Title */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
               <input
@@ -81,6 +81,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
               />
             </div>
 
+            {/* Content Type */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
               <select
@@ -94,6 +95,27 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
               </select>
             </div>
 
+            {/* Category */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              >
+                <option value="" disabled>Select category</option>
+                <option value="Crop Rotation">Crop Rotation</option>
+                <option value="Soil and Water Conservation">Soil and Water Conservation</option>
+                <option value="Pest Management">Pest Management</option>
+                <option value="Livestock Management">Livestock Management</option>
+                <option value="Agroforestry">Agroforestry</option>
+                <option value="Smart Farming">Smart Farming</option>
+              </select>
+            </div>
+
+            {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
               <textarea
@@ -106,6 +128,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
               ></textarea>
             </div>
 
+            {/* Thumbnail */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Thumbnail URL</label>
               <input
@@ -119,6 +142,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
               />
             </div>
 
+            {/* URL */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {formData.type === 'article' ? 'Article URL' : 'Video URL'}
@@ -134,6 +158,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
               />
             </div>
 
+            {/* Duration (for video only) */}
             {formData.type === 'video' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Duration (MM:SS)</label>
@@ -150,6 +175,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
             )}
           </div>
 
+          {/* Action Buttons */}
           <div className="mt-6 flex justify-end space-x-3">
             <button
               type="button"

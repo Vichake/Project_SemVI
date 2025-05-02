@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../constants/config.js'
 
 // SVG icons as components
 const SearchIcon = () => (
@@ -104,7 +105,7 @@ const SchemesAPI = {
   // Fetch all schemes
   fetchSchemes: async () => {
     try {
-      const response = await fetch('/admin/schemes');
+      const response = await fetch(`${API_URL}/admin/schemes`);
       if (!response.ok) throw new Error('Failed to fetch schemes');
       return await response.json();
     } catch (error) {
@@ -117,9 +118,9 @@ const SchemesAPI = {
   // Create a new scheme
   createScheme: async (schemeData) => {
     try {
-      console.log('Creating scheme:', schemeData);
+      console.log(schemeData)
 
-      const response = await fetch('/admin/schemes', {
+      const response = await fetch(`${API_URL}/admin/schemes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(schemeData)
@@ -137,7 +138,7 @@ const SchemesAPI = {
   // Update an existing scheme
   updateScheme: async (id, schemeData) => {
     try {
-      const response = await fetch(`/api/schemes/${id}`, {
+      const response = await fetch(`${API_URL}/admin/schemes/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(schemeData)
@@ -153,7 +154,7 @@ const SchemesAPI = {
   // Delete a scheme
   deleteScheme: async (id) => {
     try {
-      const response = await fetch(`/api/schemes/${id}`, {
+      const response = await fetch(`${API_URL}/admin/schemes/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error('Failed to delete scheme');

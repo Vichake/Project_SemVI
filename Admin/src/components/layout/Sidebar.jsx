@@ -15,13 +15,9 @@ const Sidebar = () => {
 
   const navItems = [
     { title: 'Dashboard', icon: <FaHome size={18} />, path: '/dashboard' },
-    { title: 'Farmers', icon: <FaUsers size={18} />, path: '/farmers' },
     { title: 'Schemes', icon: <FaFileAlt size={18} />, path: '/schemes' },
     { title: 'Instruments', icon: <FaTractor size={18} />, path: '/instruments' },
-    { title: 'Locations', icon: <FaMapMarkedAlt size={18} />, path: '/locations' },
     { title: 'Content', icon: <FaBookOpen size={18} />, path: '/content' },
-    { title: 'Analytics', icon: <FaChartBar size={18} />, path: '/analytics' },
-    { title: 'Settings', icon: <FaCog size={18} />, path: '/settings' },
   ];
 
   return (

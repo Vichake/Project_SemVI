@@ -52,7 +52,7 @@ function Navbar({ changeLanguage, language }) {
   return (
     <header ref={headerRef} className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
-        <h1 id="main-title">🌾 Farmer's Portal 🌾</h1>
+        <h1 id="main-title">TechKisan</h1>
         <nav>
           <ul className="nav-links">
             <li><Link to="landing" smooth={true} duration={500} className="navbar-link">{navLinks[language].Home}</Link></li>  

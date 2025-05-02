@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ContentCard from './components/ContentCard';
 import ContentModal from './components/ContentModel';
 import VideoPlayer from './components/VideoPlayer';
+import { API_URL } from '../constants/config';
 
 const ContentPage = () => {
   const [contents, setContents] = useState([]);
@@ -13,13 +14,12 @@ const ContentPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = 'http://localhost:5000';
 
   // Fetch data from database
   const fetchContents = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/admin/contents`,{
+      const response = await fetch(`${API_URL}/admin/content`,{
         method: 'GET'
       });
       
@@ -28,7 +28,18 @@ const ContentPage = () => {
       }
       
       const data = await response.json();
-      setContents(data);
+      // console.log(data);
+      
+      // Fix: Check if data is an object with content property (array)
+      if (data && data.content && Array.isArray(data.content)) {
+        setContents(data.content);
+      } else if (Array.isArray(data)) {
+        setContents(data);
+      } else {
+        console.error("Unexpected data format:", data);
+        setContents([]);
+      }
+      
       setError(null);
     } catch (err) {
       console.error("Failed to fetch content:", err);
@@ -61,7 +72,7 @@ const ContentPage = () => {
         date: now.toISOString().split('T')[0],
       };
       console.log("Adding content:", newContent);
-      const response = await fetch(`${API_URL}/admin/contents`, {
+      const response = await fetch(`${API_URL}/admin/addcontents`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +84,9 @@ const ContentPage = () => {
         throw new Error(`Error adding content: ${response.status}`);
       }
 
-      const createdContent = await response.json();
+      const responseData = await response.json();
+      // Handle potential nested response format
+      const createdContent = responseData.content || responseData;
       
       // Update state with new content
       setContents((prevContents) => [...prevContents, createdContent]);
@@ -89,41 +102,40 @@ const ContentPage = () => {
 
   // Update existing content in database
   const handleUpdateContent = async (id, contentData) => {
-    try {
-      const response = await fetch(`${API_URL}/admin/contents/${id}`, {
+    try {    
+      const response = await fetch(`${API_URL}/admin/content/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(contentData),
       });
-
+    
       if (!response.ok) {
         throw new Error(`Error updating content: ${response.status}`);
       }
-
-      const updatedContent = await response.json();
-      
-      // Update state with modified content
+    
+      const responseData = await response.json();
+    
       setContents((prevContents) =>
-        prevContents.map((item) => (item.id === id ? updatedContent : item))
+        prevContents.map((item) => (item._id === id ? responseData : item))
       );
-      
+    
       setIsModalOpen(false);
       setEditingContent(null);
-      
-      return updatedContent;
+    
+      return responseData;
     } catch (err) {
       console.error("Failed to update content:", err);
       alert(`Failed to update content: ${err.message}`);
       return null;
-    }
+    }    
   };
 
   // Delete content from database
   const handleDeleteContent = async (id) => {
     try {
-      const response = await fetch(`${API_URL}/admin/contents/${id}`, {
+      const response = await fetch(`${API_URL}/admin/content/${id}`, {
         method: 'DELETE',
       });
 
@@ -132,7 +144,7 @@ const ContentPage = () => {
       }
 
       // Remove deleted content from state
-      setContents((prevContents) => prevContents.filter((item) => item.id !== id));
+      setContents((prevContents) => prevContents.filter((item) => item._id !== id));
       
       return true;
     } catch (err) {
@@ -145,7 +157,7 @@ const ContentPage = () => {
   // Handle save content (decides between adding and updating)
   const handleSaveContent = (contentData) => {
     if (editingContent) {
-      return handleUpdateContent(editingContent.id, contentData);
+      return handleUpdateContent(editingContent._id, contentData);
     } else {
       return handleAddContent(contentData);
     }
@@ -233,7 +245,7 @@ const ContentPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredContents.map((content) => (
             <ContentCard
-              key={content.id}
+              key={content._id}
               content={content}
               onEdit={handleOpenEditModal}
               onDelete={handleDeleteContent}

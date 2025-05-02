@@ -16,6 +16,11 @@ const ContentCard = ({ content, onEdit, onDelete, onVideoPlay }) => {
         className="relative aspect-video bg-gray-100 cursor-pointer" 
         onClick={handleCardClick}
       >
+        {content.category && (
+          <div className="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded">
+            {content.category}
+          </div>
+        )}
         {content.thumbnail ? (
           <img 
             src={content.thumbnail} 
@@ -80,7 +85,7 @@ const ContentCard = ({ content, onEdit, onDelete, onVideoPlay }) => {
           ✏️
         </button>
         <button 
-          onClick={() => onDelete(content.id)} 
+          onClick={() => onDelete(content._id)} 
           className="p-1 text-red-600 hover:text-red-800" 
           title="Delete"
         >

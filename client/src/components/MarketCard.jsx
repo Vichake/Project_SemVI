@@ -12,7 +12,7 @@ const MarketCard = ({ market, distance }) => {
   return (
     <div className="market-card" onClick={handleClick}>
       <div className="market-card__content">
-        <h3 className="market-card__title">{marketName}</h3>
+        <h3 className="market-card__title">{marketName}  </h3>
         <div className="market-card__details">
           <div className="market-card__info">
             <span className="market-card__label">District:</span>

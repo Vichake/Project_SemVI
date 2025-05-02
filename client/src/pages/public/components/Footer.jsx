@@ -15,7 +15,7 @@ const Footer = () => {
           {/* Left Column */}
           <div className="footer-col">
             <h3 className="footer-logo">
-              <span className="text-primary">Agri</span>Schemes
+              <span className="text-primary">Tech</span>Kisan
             </h3>
             <p className="footer-description">
               Empowering farmers with access to verified government schemes, eligibility checks, and educational resources. Our mission is to simplify support for India’s agricultural heroes.
