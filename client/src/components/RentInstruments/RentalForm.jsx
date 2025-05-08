@@ -6,7 +6,7 @@ const RentalForm = ({ equipment, model, onClose, onSubmit }) => (
         <form onSubmit={onSubmit}>
           <input name="name" placeholder="Your Name" required />
           <input name="email" type="email" placeholder="Email" required />
-          <input name="duration" placeholder="Rental Duration (days)" required />
+          <input name="duration" placeholder="Rental Duration (hour's)" required />
           <button type="submit">Submit Rental</button>
         </form>
       </div>

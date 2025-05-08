@@ -40,7 +40,6 @@ const RentInstruments = () => {
           name: item.instrumentName,
           category: item.instrumentCategory,
           description: `Provided by ${item.farmer}`,
-          image: `/images/${item.instrumentCategory}1.jpg`, // Fallback image based on category
           price: item.rentPerHour,
           models: [{ id: `${item._id}-default`, name: 'Standard', price: item.rentPerHour }],
           location: {
@@ -57,71 +56,7 @@ const RentInstruments = () => {
         setError(null);
       } catch (err) {
         console.error("Failed to fetch equipment:", err);
-        setError('Failed to load equipment data. Please try again later.');
-        
-        // Set fallback data in case of error
-        const fallbackData = [
-          {
-            id: 1,
-            name: 'Tractor Model A',
-            category: 'tractor',
-            description: 'High-power tractor suitable for heavy-duty tasks.',
-            image: '/images/tractor1.jpg',
-            price: 1200,
-            models: [
-              { id: 101, name: 'Model A1', price: 1200 },
-              { id: 102, name: 'Model A2', price: 1400 },
-            ],
-            location: {
-              address: 'Nerul West, Navi Mumbai'
-            },
-            quantity: 5,
-            status: 'active',
-            lastServiceDate: '31/05/2025',
-            contactNumber: '+91 9665419502'
-          },
-          {
-            id: 2,
-            name: 'Harvester X200',
-            category: 'harvester',
-            description: 'Efficient and fast crop harvesting.',
-            image: '/images/harvester1.jpg',
-            price: 1500,
-            models: [
-              { id: 201, name: 'X200 Pro', price: 1500 },
-              { id: 202, name: 'X200 Max', price: 1800 },
-            ],
-            location: {
-              address: 'Kharghar, Navi Mumbai'
-            },
-            quantity: 3,
-            status: 'active',
-            lastServiceDate: '15/05/2025',
-            contactNumber: '+91 9898765432'
-          },
-          {
-            id: 3,
-            name: 'PlowMaster 3000',
-            category: 'plow',
-            description: 'Strong and reliable plowing tool.',
-            image: '/images/plow1.jpg',
-            price: 800,
-            models: [
-              { id: 301, name: 'Standard', price: 800 },
-              { id: 302, name: 'Deluxe', price: 950 },
-            ],
-            location: {
-              address: 'Vashi, Navi Mumbai'
-            },
-            quantity: 8,
-            status: 'active',
-            lastServiceDate: '20/04/2025',
-            contactNumber: '+91 9765432100'
-          },
-        ];
-        
-        setEquipmentList(fallbackData);
-        setFilteredEquipmentList(fallbackData);
+        setError('Failed to load equipment data. Please try again later.');        
       } finally {
         setLoading(false);
       }

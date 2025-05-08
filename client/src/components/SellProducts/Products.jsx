@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { connectSellSocket } from "../../socket.js"; // <-- Add this
+import { connectSellSocket,disconnectSellSocket } from "../../socket.js"; // <-- Add this
 import { useUser } from "../../context/userContext.jsx";
 import { API_URL } from "../../context/config.jsx";
 const ProductCardList = () => {
@@ -54,6 +54,7 @@ const ProductCardList = () => {
   
     return () => {
       socket.off("productAdded");
+      disconnectSellSocket();
       // socket.disconnect();
     };
   }, []);

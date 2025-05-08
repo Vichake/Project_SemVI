@@ -6,16 +6,18 @@
     padding: 4rem 2rem;
     margin: 3rem auto;
     max-width: 700px;
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+    background: url('https://media.istockphoto.com/id/1270570904/photo/harvesting-machine-approaching-wheat.jpg?s=612x612&w=0&k=20&c=jwDSrUojVqrpsjiSpIaHStrJWUnLHlXKlJlXXu2dhGE=');
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: all 0.3s ease-in-out;
     backdrop-filter: blur(10px); /* Apply blur effect for glassmorphism */
     border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for glass effect */
+    background-size: cover;
   }
   
   .welcome-card {
+    
     background-color: #ffffff;
     border-radius: 16px;
     padding: 2rem 3rem;
@@ -32,13 +34,13 @@
   
   .welcome-title {
     font-size: 2rem;
-    color: #4caf50; /* Green farm tone */
+    color: #07680b; /* Green farm tone */
     margin-bottom: 1rem;
   }
   
   .welcome-message {
     font-size: 1rem;
-    color: #666;
+    color: #040101;
   }
   
   /* Responsive adjustments */

@@ -106,7 +106,7 @@ const ContentModal = ({ isOpen, onClose, content = null, onSave }) => {
                 required
               >
                 <option value="" disabled>Select category</option>
-                <option value="Crop Rotation">Crop Rotation</option>
+                <option value="Crop Production">Crop Production</option>
                 <option value="Soil and Water Conservation">Soil and Water Conservation</option>
                 <option value="Pest Management">Pest Management</option>
                 <option value="Livestock Management">Livestock Management</option>

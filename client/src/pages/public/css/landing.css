@@ -481,13 +481,15 @@ nav {
   padding: 4rem 2rem;
   margin: 3rem auto;
   max-width: 700px;
-  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+  /* background: rgba(255, 255, 255, 0.2); Semi-transparent white background */
   border-radius: 16px;
+  background: url('https://media.istockphoto.com/id/1270570904/photo/harvesting-machine-approaching-wheat.jpg?s=612x612&w=0&k=20&c=jwDSrUojVqrpsjiSpIaHStrJWUnLHlXKlJlXXu2dhGE=');
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: all 0.3s ease-in-out;
   backdrop-filter: blur(10px); /* Apply blur effect for glassmorphism */
   border: 1px solid rgba(255, 255, 255, 0.3); /* Light border for glass effect */
+  background-size: cover;
 }
 
 .join-section:hover {

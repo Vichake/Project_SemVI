@@ -32,11 +32,7 @@ function FarmMarketHub() {
 
       <main className="main-content">
         <MarketSelector activeMarket={activeMarket} onMarketChange={handleMarketChange} />
-        <ProductCategories />
-
-        <button className="button button-white" id="sellProductsButton" onClick={toggleModal}>
-          Sell Products
-        </button>
+        {/* <ProductCategories /> */}
       </main>
 
       <SellProductModal visible={modalVisible} onClose={toggleModal} />

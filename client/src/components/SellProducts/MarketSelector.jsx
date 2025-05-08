@@ -96,7 +96,7 @@ function MarketSelector({ activeMarket, onMarketChange }) {
           The request is taking too long. Please try again later.
         </p>
       )}
-
+      
       <div className="market-prices">
         {filteredProducts.length === 0 ? (
           <p className="no-products"></p>

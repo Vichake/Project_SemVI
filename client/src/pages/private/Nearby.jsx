@@ -113,23 +113,6 @@ const Nearby = () => {
             </div>
           ) : error ? (
             <div className="nearby-view__error">Error: {error}</div>
-          ) : selectedMarket ? (
-            // Single Market View
-            <div className="nearby-view__detail">
-              <button
-                className="nearby-view__back-btn"
-                onClick={() => setSelectedMarket(null)}
-              >
-                ← Back to Markets
-              </button>
-              <h2 className="nearby-view__market-title">{selectedMarket.name}</h2>
-              <div className="nearby-view__market-info">
-                <p className="nearby-view__market-description"><strong>Description:</strong> Best market near you</p>
-                <p className="nearby-view__market-address"><strong>Address:</strong> Vashi, Navi Mumbai</p>
-                <p className="nearby-view__market-distance"><strong>Distance:</strong> {selectedMarket.distance?.toFixed(2)} km</p>
-                {/* Add more info here if available */}
-              </div>
-            </div>
           ) : (
             // Grid View
             <>
