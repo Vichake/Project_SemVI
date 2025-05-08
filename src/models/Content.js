@@ -12,7 +12,7 @@ const contentSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Crop Rotation', 'Soil and Water Conservation', 'Pest Management', 'Livestock Management', 'Agroforestry','Smart Farming'],
+    enum: ['Crop Production', 'Soil and Water Conservation', 'Pest Management', 'Livestock Management', 'Agroforestry','Smart Farming'],
     required: true,
   },
   description: {
